@@ -4,8 +4,11 @@
 
 #include <iostream>
 #include <vector>
+
 #include <unordered_map>
 #include <typeindex>
+
+#include <algorithm>
 
 #define ECS ecs::instance()
 
@@ -26,15 +29,18 @@ namespace px
     {
         private:
             int size;
-        
-        public:
+
             vector<T> components;
             vector<bool> alive;
+        
+        public:
+            vector<Entity> actives;
             
             ComponentPool()
             {
-                components.reserve(component_pool_max_capacity);
-                alive.reserve(component_pool_max_capacity);
+                components.resize(component_pool_max_capacity);
+                alive.resize(component_pool_max_capacity, false);
+
                 size = components.size();
             }
 
@@ -48,8 +54,12 @@ namespace px
                     size = components.size();
                 }
 
-                components[id] = T{};
-                alive[id] = true;
+                if (!alive[id])
+                {
+                    components[id] = T{};
+                    alive[id] = true;
+                    actives.push_back(id);
+                }
             }
 
             T* get(Entity id)
@@ -58,7 +68,20 @@ namespace px
                 return nullptr;
             }
 
-            void remove(Entity id) { if (id < size) { alive[id] = false; } }
+            void remove(Entity id)
+            {
+                if (id < size)
+                {
+                    alive[id] = false;
+
+                    auto it = std::find(actives.begin(), actives.end(), id);
+                    if (it != actives.end())
+                    {
+                        std::iter_swap(it, actives.end() - 1);
+                        actives.pop_back();
+                    }
+                }
+            }
     };
 
 //--------------------------------------
