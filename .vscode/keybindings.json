@@ -1,0 +1,7 @@
+[
+  {
+    "key": "f2",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Build and Run"
+  }
+]
