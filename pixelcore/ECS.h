@@ -9,6 +9,7 @@
 #include <typeindex>
 
 #include <algorithm>
+#include <functional>
 
 #define ECS ecs::instance()
 
@@ -20,6 +21,7 @@ namespace px
     using std::type_index;
 
     using Entity = size_t;
+    using RemoveFunc = std::function<void(Entity)>;
 
     const int component_pool_max_capacity = 1000;
 
@@ -93,7 +95,9 @@ namespace px
             ecs() = default;
 
             size_t previous_entity_id = -1;
+            
             unordered_map<type_index, void*> pools;
+            vector<RemoveFunc> component_removers;
 
         public:
             int create_entity()
@@ -107,7 +111,12 @@ namespace px
             {
                 type_index typeId = typeid(T);
 
-                if (pools.find(typeId) == pools.end()) pools[typeId] = new ComponentPool<T>();
+                if (pools.find(typeId) == pools.end())
+                {
+                    pools[typeId] = new ComponentPool<T>();
+
+                    component_removers.push_back([this](Entity e) { this->remove<T>(e); });
+                }
 
                 static_cast<ComponentPool<T>*>(pools[typeId])->add(entity);
             }
@@ -120,6 +129,9 @@ namespace px
                 else return static_cast<ComponentPool<T>*>(pools[typeId])->get(entity);
             }
 
+            void remove_entity(Entity entity)
+            { for (auto& remover : component_removers) remover(entity); }
+
             template <typename T>
             void remove(Entity entity)
             {
@@ -127,6 +139,10 @@ namespace px
                 if (pools.find(typeId) != pools.end())
                     static_cast<ComponentPool<T>*>(pools[typeId])->remove(entity);
             }
+
+            template<typename... Components>
+            void remove_from_entity(px::Entity entity)
+                { (ECS.remove<Components>(entity), ...); }
 
             template <typename T>
             const vector<Entity>& each()

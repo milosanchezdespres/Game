@@ -21,5 +21,19 @@ int main()
         cout << transform->y << endl;
     }
 
+    ECS.remove_entity(test);
+
+    cout << "..........................." << endl;
+
+    for(Entity entity : ECS.each<Transform>())
+    {
+        Transform* transform = ECS.component<Transform>(entity);
+
+        cout << transform->x << endl;
+        cout << transform->y << endl;
+    }
+
+    cout << "..........................." << endl;
+
     return 0;
 }
