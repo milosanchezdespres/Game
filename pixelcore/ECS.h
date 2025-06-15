@@ -91,9 +91,33 @@ namespace px
 
         private:
             ecs() = default;
+
+            size_t previous_entity_id = -1;
             unordered_map<type_index, void*> pools;
 
         public:
-            //....
+            int create_entity()
+            {
+                previous_entity_id++;
+                return previous_entity_id;
+            }
+
+        template <typename T>
+        void add_component(Entity entity)
+        {
+            type_index typeId = typeid(T);
+
+            if (pools.find(typeId) == pools.end()) pools[typeId] = new ComponentPool<T>();
+
+            static_cast<ComponentPool<T>*>(pools[typeId])->add(entity);
+        }
+
+        template <typename T>
+        T* component(Entity entity)
+        {
+            type_index typeId = typeid(T);
+            if (pools.find(typeId) == pools.end()) return nullptr;
+            else return static_cast<ComponentPool<T>*>(pools[typeId])->get(entity);
+        }
     };
 }
