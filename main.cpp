@@ -13,6 +13,8 @@ int main()
     ECS.component<Transform>(test)->x  = 60;
     ECS.component<Transform>(test)->y  = 40;
 
+    cout << "..........................." << endl;
+
     for(Entity entity : ECS.each<Transform>())
     {
         Transform* transform = ECS.component<Transform>(entity);
@@ -21,7 +23,7 @@ int main()
         cout << transform->y << endl;
     }
 
-    ECS.remove_entity(test);
+    ECS.clear();
 
     cout << "..........................." << endl;
 

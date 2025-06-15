@@ -95,9 +95,10 @@ namespace px
             ecs() = default;
 
             size_t previous_entity_id = -1;
-            
             unordered_map<type_index, void*> pools;
+
             vector<RemoveFunc> component_removers;
+            unordered_map<type_index, std::function<void(void*)>> pool_deleters;
 
         public:
             int create_entity()
@@ -116,6 +117,8 @@ namespace px
                     pools[typeId] = new ComponentPool<T>();
 
                     component_removers.push_back([this](Entity e) { this->remove<T>(e); });
+
+                    pool_deleters[typeId] = [](void* ptr) { delete static_cast<ComponentPool<T>*>(ptr); };
                 }
 
                 static_cast<ComponentPool<T>*>(pools[typeId])->add(entity);
@@ -149,6 +152,16 @@ namespace px
             {
                 type_index typeId = typeid(T);
                 return static_cast<ComponentPool<T>*>(pools[typeId])->actives;
+            }
+
+            void clear()
+            {
+                for (auto& [typeId, pool_ptr] : pools) { pool_deleters[typeId](pool_ptr); }
+
+                pools.clear();
+                pool_deleters.clear();
+                component_removers.clear();
+                previous_entity_id = -1;
             }
 
             int size() { return previous_entity_id + 1; }
