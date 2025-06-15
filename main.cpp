@@ -3,10 +3,7 @@
 
 using namespace px;
 
-struct Transform
-{
-    float x, y;
-};
+struct Transform { float x, y; };
 
 int main()
 {
