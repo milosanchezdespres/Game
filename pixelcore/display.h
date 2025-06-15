@@ -82,9 +82,9 @@ namespace px
 
             //...
 
-            void blit(float x, float y, float r, float g, float b, int scale)
+            void blit(float x, float y, float r, float g, float b, float a, int scale)
             {
-                glColor3f(r, g, b);
+                glColor4f(r, g, b, a);
                 glPointSize(scale);
                 glBegin(GL_POINTS);
                 glVertex2f(x, y);
