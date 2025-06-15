@@ -82,13 +82,15 @@ namespace px
                 glfwPollEvents();
             }
 
-            void exit()
+            int exit()
             {
                 if (window) glfwDestroyWindow(window);
 
                 window = nullptr;
 
                 glfwTerminate();
+
+                return 0;
             }
 
         private:

@@ -21,7 +21,5 @@ int main()
         SCREEN.end_render();
     }
 
-    SCREEN.exit();
-
-    return 0;
+    return SCREEN.exit();
 }
