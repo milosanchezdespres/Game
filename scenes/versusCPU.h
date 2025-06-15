@@ -21,9 +21,9 @@ struct versusCPU : public GameMode
 
     void enter() override
     {
-        test1 = entity::make_debug();
-        test2 = entity::make_debug();
-        test3 = entity::make_debug();
+        test1 = entity::make::debug();
+        test2 = entity::make::debug();
+        test3 = entity::make::debug();
 
         ECS.component<Transform>(test2)->x = 220;
         ECS.component<Transform>(test1)->y = 100;
@@ -32,7 +32,7 @@ struct versusCPU : public GameMode
     void render() override
     {
         for(auto e: ECS.each<Transform>())
-            { entity::render_debug(e); }
+            { entity::render::debug(e); }
     }
 
     void exit() override { ECS.clear(); }
