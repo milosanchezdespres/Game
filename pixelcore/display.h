@@ -7,6 +7,8 @@
 #include "singleton.h"
 
 #define SCREEN display::instance()
+#define delta SCREEN.frameDelta
+#define fps static_cast<int>(1.0f / delta) 
 
 namespace px
 {
@@ -22,9 +24,6 @@ namespace px
 
             GLFWwindow* window;
 
-            double lastTime;
-            double currentTime;
-
             display()
                 : _title(nullptr)
                 , _width(0)
@@ -38,6 +37,10 @@ namespace px
             const char* const& title;
             const int& width;
             const int& height;
+
+            double lastTime;
+            double currentTime;
+            float frameDelta;
 
             void init(const char* new_title, int new_width, int new_height, bool center_window = true, bool resizable = false)
             {
@@ -62,8 +65,9 @@ namespace px
 
             bool active()
             {
-                lastTime = currentTime;
                 currentTime = glfwGetTime();
+                frameDelta = static_cast<float>(currentTime - lastTime);
+                lastTime = currentTime;
 
                 return window && !glfwWindowShouldClose(window);
             }
@@ -74,6 +78,17 @@ namespace px
                 glClear(GL_COLOR_BUFFER_BIT);
 
                 glEnable(GL_TEXTURE_2D);
+            }
+
+            //...
+
+            void blit(float x, float y, float r, float g, float b, int scale)
+            {
+                glColor3f(r, g, b);
+                glPointSize(scale);
+                glBegin(GL_POINTS);
+                glVertex2f(x, y);
+                glEnd();
             }
 
             void end_render()
@@ -101,6 +116,7 @@ namespace px
                 if(center_window) center();
 
                 glfwMakeContextCurrent(window);
+                glfwSwapInterval(1);
 
                 glMatrixMode(GL_PROJECTION);
                 glLoadIdentity();

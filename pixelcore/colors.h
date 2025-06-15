@@ -32,6 +32,12 @@
 //allows you to expand in one go a color into a function with normalized values
 #define nexpand(color) nunpack(color)[0], nunpack(color)[1], nunpack(color)[2], nunpack(color)[3]
 
+//allows you to expand in one go a color into a function (but does not expand alpha)
+#define expand2(color) unpack(color)[0], unpack(color)[1], unpack(color)[2]
+
+//allows you to expand in one go a color into a function with normalized values (but does not expand alpha)
+#define nexpand2(color) nunpack(color)[0], nunpack(color)[1], nunpack(color)[2]
+
 namespace px
 {
 //------------------------------------------------------------
