@@ -24,6 +24,12 @@
 #define set_color(pixels, index, color) pixels[index] = color
 #define get_color(pixels, index) pixels[index]
 
+//------------------------------------------------------------
+//allows you to expand in one go a color into a function
+#define expand(color) unpack(color)[0], unpack(color)[1], unpack(color)[2], unpack(color)[3]
+//allows you to expand in one go a color into a function with normalize values
+#define nexpand(color) nunpack(color)[0], nunpack(color)[1], nunpack(color)[2], nunpack(color)[3]
+
 namespace px
 {
 //------------------------------------------------------------
