@@ -27,7 +27,8 @@
 //------------------------------------------------------------
 //allows you to expand in one go a color into a function
 #define expand(color) unpack(color)[0], unpack(color)[1], unpack(color)[2], unpack(color)[3]
-//allows you to expand in one go a color into a function with normalize values
+
+//allows you to expand in one go a color into a function with normalized values
 #define nexpand(color) nunpack(color)[0], nunpack(color)[1], nunpack(color)[2], nunpack(color)[3]
 
 namespace px
@@ -41,7 +42,7 @@ namespace px
     using ub8 = uint8_t;
     using ub32 = uint32_t;
 
-    //RGBA //packed to int32
+    //RGBA //packed to unsigned int 32
     using Color = ub32;
 
     //RGBA 255 //unpacked
