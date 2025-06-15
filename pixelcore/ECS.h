@@ -127,5 +127,14 @@ namespace px
                 if (pools.find(typeId) != pools.end())
                     static_cast<ComponentPool<T>*>(pools[typeId])->remove(entity);
             }
+
+            template <typename T>
+            const vector<Entity>& each()
+            {
+                type_index typeId = typeid(T);
+                return static_cast<ComponentPool<T>*>(pools[typeId])->actives;
+            }
+
+            int size() { return previous_entity_id + 1; }
     };
 }

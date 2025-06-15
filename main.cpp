@@ -13,10 +13,13 @@ int main()
     ECS.component<Transform>(test)->x  = 60;
     ECS.component<Transform>(test)->y  = 40;
 
-    cout << ECS.component<Transform>(test)->x << endl;
-    cout << ECS.component<Transform>(test)->y << endl;
+    for(Entity entity : ECS.each<Transform>())
+    {
+        Transform* transform = ECS.component<Transform>(entity);
 
-    ECS.remove<Transform>(test);
+        cout << transform->x << endl;
+        cout << transform->y << endl;
+    }
 
     return 0;
 }
