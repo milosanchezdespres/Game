@@ -8,7 +8,7 @@ int main()
 {
     SCREEN.init("untitled", 680, 516);
 
-    Color bgcolor = pack(188, 62, 28);
+    Color bgcolor = pack("#123248");
 
     while(SCREEN.active())
     {

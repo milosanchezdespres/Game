@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <ostream>
+#include <cstring>
 //...
 
 //------------------------------------------------------------
@@ -76,6 +77,27 @@ namespace px
             static_cast<ub8>(color[3] * 255)
         );
     }
+
+    //get a ub32 color from hex value
+    constexpr Color pack(const char* hex)
+    {
+        int r = 0, g = 0, b = 0, a = 0;
+
+        if(hex[0] == '#') hex++;
+
+        int len = std::strlen(hex);
+        if(len == 6)
+        {
+            sscanf(hex, "%2x%2x%2x", &r, &g, &b);
+            a = 255;
+        }
+        else if(len == 8) sscanf(hex, "%2x%2x%2x", &r, &g, &b);
+        else r = g = b = a = 0;
+
+        return pack(r, g, b, a);
+    }
+
+    constexpr Color pack(HEX hex) { return pack(hex.data()); }
 
     //unpack color to rgba values
     constexpr RGBA unpack(Color color)
