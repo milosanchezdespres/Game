@@ -160,7 +160,9 @@ namespace px
 
                 pools.clear();
                 pool_deleters.clear();
+
                 component_removers.clear();
+
                 previous_entity_id = -1;
             }
 

@@ -1,41 +1,14 @@
 #include "pixelcore/colors.h"
 #include "pixelcore/ECS.h"
+#include "pixelcore/Display.h"
 
 using namespace px;
 
-struct Transform { float x, y; };
-
 int main()
 {
-    Entity test = ECS.create_entity();
+    SCREEN.init("untitled", 800, 480);
 
-    ECS.add_component<Transform>(test);
-    ECS.component<Transform>(test)->x  = 60;
-    ECS.component<Transform>(test)->y  = 40;
-
-    cout << "..........................." << endl;
-
-    for(Entity entity : ECS.each<Transform>())
-    {
-        Transform* transform = ECS.component<Transform>(entity);
-
-        cout << transform->x << endl;
-        cout << transform->y << endl;
-    }
-
-    ECS.clear();
-
-    cout << "..........................." << endl;
-
-    for(Entity entity : ECS.each<Transform>())
-    {
-        Transform* transform = ECS.component<Transform>(entity);
-
-        cout << transform->x << endl;
-        cout << transform->y << endl;
-    }
-
-    cout << "..........................." << endl;
+    cout << SCREEN.width << endl;
 
     return 0;
 }
