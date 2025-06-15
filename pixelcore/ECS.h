@@ -119,5 +119,13 @@ namespace px
             if (pools.find(typeId) == pools.end()) return nullptr;
             else return static_cast<ComponentPool<T>*>(pools[typeId])->get(entity);
         }
+
+        template <typename T>
+        void remove(Entity entity)
+        {
+            type_index typeId = typeid(T);
+            if (pools.find(typeId) != pools.end())
+                static_cast<ComponentPool<T>*>(pools[typeId])->remove(entity);
+        }
     };
 }
