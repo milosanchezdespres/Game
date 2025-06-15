@@ -82,6 +82,7 @@ namespace px
 
             //...
 
+            //this is only for debugging
             void blit(float x, float y, float r, float g, float b, float a, int scale)
             {
                 glColor4f(r, g, b, a);
