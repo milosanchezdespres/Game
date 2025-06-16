@@ -4,7 +4,7 @@
 #include "../../pixelcore/colors.h"
 #include "../../pixelcore/display.h"
 
-#include "../components/Name.h"
+#include "../components/Enabled.h"
 #include "../components/Transform.h"
 using namespace components;
 
@@ -12,12 +12,12 @@ namespace entity
 {
     namespace make
     {
-        inline int debug(const char* name = "unnamed")
+        inline int debug()
         {
             int ID = ECS.create_entity();
 
-            ECS.add_component<Name>(ID);
-            ECS.component<Name>(ID)->value = name;
+            ECS.add_component<Enabled>(ID);
+            ECS.component<Enabled>(ID)->value = true;
 
             ECS.add_component<Transform>(ID);
             ECS.component<Transform>(ID)->color = pack("#ff00c8");

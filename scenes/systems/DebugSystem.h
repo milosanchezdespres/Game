@@ -4,6 +4,7 @@
 #include "../../pixelcore/display.h"
 
 #include "../components/Transform.h"
+#include "../components/Enabled.h"
 
 struct DebugSystem : System<Transform>
 {
@@ -11,10 +12,9 @@ struct DebugSystem : System<Transform>
 
     void OnUpdate(Entity entity, Transform* component) override
     {
-        const char* name = ECS.component<Name>(entity)->value;
-        bool ignored = name == "test4";
+        bool enabled = ECS.component<Enabled>(entity)->value;
 
-        if(!ignored)
+        if(enabled)
         {
             component->x += component->axis * (250 * delta);
             component->y += component->axis * (250 * delta);

@@ -2,8 +2,8 @@
 
 namespace components
 {
-    struct Name
+    struct Enabled
     {
-        const char* value;
+        bool value;
     };
 }
