@@ -4,8 +4,16 @@
 
 namespace components
 {
+    enum class EntityType
+    {
+        player,
+        npc,
+        none
+    };
+
     struct Flags
     {
+        EntityType type;
         bool enabled;
         //...
     };

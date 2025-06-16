@@ -18,6 +18,7 @@ namespace entity
             int ID = ECS.create_entity();
 
             ECS.add_component<Flags>(ID);
+            ECS.component<Flags>(ID)->type = EntityType::none;
             ECS.component<Flags>(ID)->enabled = true;
             //...
 
