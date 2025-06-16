@@ -22,14 +22,14 @@ struct DebugSystem : System<Transform>
         int B = unpack(component->color)[2];
         int A = unpack(component->color)[3];
 
-        if(R > 255) R -= (int) (5 * (1 + delta));
-        else R += (int) (5 * (1 + delta));
+        if(R > 255) R -= (int) (15 * (1 + delta));
+        else R += (int) (1 * (15 + delta));
 
-        if(G > 255) G -= (int) (50 * (1 + delta));
-        else G += (int) (50 * (1 + delta));
+        if(G > 255) G -= (int) (60 * (1 + delta));
+        else G += (int) (60 * (1 + delta));
 
-        if(B > 255) B -= (int) (1 * (1 + delta));
-        else B += (int) (1 * (1 + delta));
+        if(B > 255) B -= (int) (11 * (1 + delta));
+        else B += (int) (1 * (11 + delta));
 
         component->color = pack(R, G, B, A);
     }
