@@ -8,7 +8,7 @@ using namespace px;
 
 int main()
 {
-    SCREEN.init("untitled", 680, 516);
+    SCREEN.init("untitled", 800, 680);
 
     Color bgcolor = pack("#123248");
 

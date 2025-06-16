@@ -17,6 +17,16 @@ using namespace px;
 
 #include <iostream>
 
+enum class versus_cpu_stage
+{
+    start_phase,
+    draw_phase,
+    choice_phase,
+    reveal_phase,
+    apply_phase,
+    end_phase
+};
+
 struct versusCPU : public GameMode
 {
     Entity test1;
@@ -24,7 +34,12 @@ struct versusCPU : public GameMode
     Entity test3;
     Entity test4;
 
-    versusCPU() : GameMode() {}
+    versusCPU() : GameMode()
+    {
+        alias = "versus_cpu";
+        stage = STAGE_INT(versus_cpu_stage::start_phase);
+    }
+    
     ~versusCPU(){}
 
     void enter() override
