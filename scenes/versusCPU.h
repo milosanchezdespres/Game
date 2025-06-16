@@ -18,15 +18,17 @@ struct versusCPU : public GameMode
     Entity test1;
     Entity test2;
     Entity test3;
+    Entity test4;
 
     versusCPU() : GameMode() {}
     ~versusCPU(){}
 
     void enter() override
     {
-        test1 = entity::make::debug();
-        test2 = entity::make::debug();
-        test3 = entity::make::debug();
+        test1 = entity::make::debug("test1");
+        test2 = entity::make::debug("test2");
+        test3 = entity::make::debug("test3");
+        test4 = entity::make::debug("test4");
 
         ECS.component<Transform>(test2)->x = 220;
         ECS.component<Transform>(test1)->y = 100;
