@@ -41,7 +41,7 @@ namespace px
                 scene->enter();
             }
 
-            void next_stage(){ stage++; }
-            void go_to_stage(int new_stage) { stage = new_stage; }
+            void next_stage(){ scene->stage++; }
+            void go_to_stage(int new_stage) { scene->stage = new_stage; }
     };
 };
