@@ -27,6 +27,7 @@ struct DebugSystem : System<Transform>
                         component->y += component->axis * (250 * delta);
                         if(component->y > SCREEN.height) component->axis = -1;
                         if(component->y < 0) component->axis = 1;
+                        component->color = pack("#ff00c8");
                         break;
 
                     case StateValue::debug:
