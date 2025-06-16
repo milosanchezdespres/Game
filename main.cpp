@@ -2,6 +2,7 @@
 using namespace std;
 
 #include "pixelcore/ecs/ecs.h"
+#include "pixelcore/GameState.h"
 
 struct CardComponent
 {
@@ -15,6 +16,8 @@ int main()
     test.add<CardComponent>();
 
     cout << test.get<CardComponent>()->text << endl;
+
+    cout << GAME_STATE.turn << endl;
 
     REG.remove_entity(test.ID);
 
