@@ -16,5 +16,7 @@ int main()
 
     cout << test.get<CardComponent>()->text << endl;
 
+    REG.remove_entity(test.ID);
+
     return 0;
 }

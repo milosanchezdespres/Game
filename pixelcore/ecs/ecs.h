@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EntityView.h"
+#include "Entity.h"
 //...
 
 using namespace px;

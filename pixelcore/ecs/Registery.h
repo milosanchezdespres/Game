@@ -53,5 +53,11 @@ namespace px
                 auto pool = static_cast<ComponentPool<T>*>(it->second.get());
                 pool->remove(ID);
             }
+
+            void remove_entity(EntityID ID)
+            {
+                for(auto& [type, pool] : pools)
+                    { pool->remove(ID); }
+            }
     };
 };
