@@ -4,8 +4,9 @@
 #include "../../pixelcore/colors.h"
 #include "../../pixelcore/display.h"
 
-#include "../components/Enabled.h"
+#include "../components/Flags.h"
 #include "../components/Transform.h"
+#include "../components/State.h"
 using namespace components;
 
 namespace entity
@@ -16,8 +17,13 @@ namespace entity
         {
             int ID = ECS.create_entity();
 
-            ECS.add_component<Enabled>(ID);
-            ECS.component<Enabled>(ID)->value = true;
+            ECS.add_component<Flags>(ID);
+            ECS.component<Flags>(ID)->enabled = true;
+            //...
+
+            ECS.add_component<State>(ID);
+            ECS.component<State>(ID)->value = StateValue::debug;
+            //...
 
             ECS.add_component<Transform>(ID);
             ECS.component<Transform>(ID)->color = pack("#ff00c8");
