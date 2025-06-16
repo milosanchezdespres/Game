@@ -40,5 +40,8 @@ namespace px
                 scene = new S();
                 scene->enter();
             }
+
+            void next_stage(){ stage++; }
+            void go_to_stage(int new_stage) { stage = new_stage; }
     };
 };
