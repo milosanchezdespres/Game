@@ -23,6 +23,12 @@ struct DebugSystem : System<Transform>
             {
                 switch(state)
                 {
+                    case StateValue::idle:
+                        component->y += component->axis * (250 * delta);
+                        if(component->y > SCREEN.height) component->axis = -1;
+                        if(component->y < 0) component->axis = 1;
+                        break;
+
                     case StateValue::debug:
                         component->x += component->axis * (250 * delta);
                         component->y += component->axis * (250 * delta);

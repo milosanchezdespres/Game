@@ -28,7 +28,8 @@ using namespace px;
 
 struct versusCPU : public GameMode
 {
-    Entity test1;
+    Entity player;
+
     Entity test2;
     Entity test3;
     Entity test4;
@@ -43,13 +44,14 @@ struct versusCPU : public GameMode
 
     void enter() override
     {
-        test1 = entity::make::debug();
+        player = entity::make::debug();
+        
         test2 = entity::make::debug();
         test3 = entity::make::debug();
         test4 = entity::make::debug();
 
-        ECS.component<Transform>(test1)->y = 100;
-        ECS.component<Flags>(test1)->type = EntityType::player;
+        ECS.component<Transform>(player)->y = 100;
+        ECS.component<Flags>(player)->type = EntityType::player;
 
         ECS.component<Transform>(test2)->x = 220;
         ECS.component<Transform>(test4)->x = 320;
