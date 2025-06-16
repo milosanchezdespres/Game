@@ -1,31 +1,20 @@
-#include "pixelcore/colors.h"
-#include "pixelcore/display.h"
-#include "pixelcore/GameMode.h"
+#include <iostream>
+using namespace std;
 
-#include "scenes/versusCPU.h"
+#include "pixelcore/ecs/ecs.h"
 
-using namespace px;
+struct CardComponent
+{
+    const char* text = "...";
+};
 
 int main()
 {
-    SCREEN.init("untitled", 800, 680);
+    Entity test = {REG.create_entity()};
 
-    Color bgcolor = pack("#123248");
+    test.add<CardComponent>();
 
-    SCENES.go_to<versusCPU>();
+    cout << test.get<CardComponent>()->text << endl;
 
-    while(SCREEN.active())
-    {
-        ECS.update();
-        
-        SCREEN.begin_render(nexpand(bgcolor));
-
-        SCENE->render();
-
-        SCREEN.end_render();
-    }
-
-    SCENE->exit();
-
-    return SCREEN.exit();
+    return 0;
 }
