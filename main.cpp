@@ -1,7 +1,6 @@
 #include <iostream>
 using namespace std;
 
-#include "pixelcore/ecs/ecs.h"
 #include "pixelcore/display.h"
 #include "pixelcore/GameState.h"
 

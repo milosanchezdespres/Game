@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../pixelcore/ecs/ecs.h"
 #include "../pixelcore/GameState.h"
 
 enum class VersusCPUPhase
