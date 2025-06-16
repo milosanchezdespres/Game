@@ -45,7 +45,7 @@ struct versusCPU : public GameMode
     void enter() override
     {
         player = entity::make::debug();
-        
+
         test2 = entity::make::debug();
         test3 = entity::make::debug();
         test4 = entity::make::debug();

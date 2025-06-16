@@ -29,8 +29,8 @@ struct StateMachine : System<State>
                 switch(GAMESTAGE)
                 {
                     case 0://draw phase
-                        if(flags->type == EntityType::player) state_component->value = StateValue::debug;
-                        else state_component->value = StateValue::idle;
+                        if(flags->type == EntityType::player) state_component->value = StateValue::idle;
+                        else state_component->value = StateValue::debug;
 
                         //draw cards...
 
