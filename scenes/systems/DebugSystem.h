@@ -12,8 +12,9 @@ struct DebugSystem : System<Transform>
     void OnUpdate(Entity entity, Transform* component) override
     {
         const char* name = ECS.component<Name>(entity)->value;
+        bool ignored = name == "test4";
 
-        if(name != "test4")
+        if(!ignored)
         {
             component->x += component->axis * (250 * delta);
             component->y += component->axis * (250 * delta);
