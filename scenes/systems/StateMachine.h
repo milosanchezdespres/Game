@@ -6,6 +6,8 @@
 #include "../components/Flags.h"
 #include "../components/State.h"
 
+//changes states based on input, AI logic, etc...
+
 struct StateMachine : System<State>
 {
     StateMachine() : System<State>() {}
