@@ -9,7 +9,7 @@
 
 //------------------------------------------------------------
 //for GLFW use // array with R, G, B, A, R, G ... layout
-#define Pixels(pixel_count) array<Color, pixel_count * 4>
+#define PIXELS(pixel_count) ([pixel_count]() { std::vector<uint32_t> pixels; pixels.resize(pixel_count * 4); return pixels; }())
 
 #define set_pixel(pixels, index, color) \
     pixels[index * 4] = unpack(color)[0];         /* R */ \

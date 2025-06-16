@@ -1,19 +1,22 @@
 #pragma once
 
-template <typename T>
-struct Singleton
+namespace px
 {
-    public:
-        static T& instance()
-        {
-            static T instance;
-            return instance;
-        }
+    template <typename T>
+    struct Singleton
+    {
+        public:
+            static T& instance()
+            {
+                static T instance;
+                return instance;
+            }
 
-    protected:
-        Singleton() = default;
-        ~Singleton() = default;
+        protected:
+            Singleton() = default;
+            ~Singleton() = default;
 
-        Singleton(const Singleton&) = delete;
-        Singleton& operator=(const Singleton&) = delete;
-};
+            Singleton(const Singleton&) = delete;
+            Singleton& operator=(const Singleton&) = delete;
+    };
+}

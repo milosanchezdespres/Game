@@ -51,7 +51,8 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "text_encoding": "cpp"
+        "text_encoding": "cpp",
+        "cstring": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

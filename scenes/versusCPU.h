@@ -13,6 +13,10 @@ using namespace px;
 
 #include <iostream>
 
+//DEBUG ONLY---------------------
+#include "../pixelcore/texture/bmp.h"
+//DEBUG ONLY---------------------
+
 struct versusCPU : public GameMode
 {
     Entity test1;
@@ -32,6 +36,12 @@ struct versusCPU : public GameMode
         ECS.component<Transform>(test1)->y = 100;
 
         ECS.attach<DebugSystem>();
+
+//DEBUG ONLY---------------------
+        BMP test = BMP();
+        test.load();
+        auto pixels = test.render();
+//DEBUG ONLY---------------------
     }
 
     void render() override
