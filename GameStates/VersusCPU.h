@@ -3,7 +3,7 @@
 #include "../pixelcore/ecs/ecs.h"
 #include "../pixelcore/GameState.h"
 
-#include "../components/CardHolder.h"
+#include "../components/Deck.h"
 
 enum class VersusCPUPhase
 {
@@ -34,11 +34,11 @@ struct VersusCPU : public GameState
                 player = {REG.create_entity()};
                 CPU = {REG.create_entity()};
 
-                player.add<CardHolder>();
-                CPU.add<CardHolder>();
+                player.add<Deck>();
+                CPU.add<Deck>();
 
-                player.get<CardHolder>()->init(8);
-                CPU.get<CardHolder>()->init(8);
+                player.get<Deck>()->init(8);
+                CPU.get<Deck>()->init(8);
 
                 data.current = phase(VersusCPUPhase::Start);
                 break;
