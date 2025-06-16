@@ -9,7 +9,7 @@ struct DebugSystem : System<Transform>
 {
     DebugSystem() : System<Transform>() {}
 
-    void OnUpdate(Transform* component)
+    void OnUpdate(Transform* component) override
     {
         component->x += component->axis * (250 * delta);
         component->y += component->axis * (250 * delta);
