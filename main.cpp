@@ -16,6 +16,8 @@ int main()
 
     while(SCREEN.active())
     {
+        ECS.update();
+        
         SCREEN.begin_render(nexpand(bgcolor));
 
         SCENE->render();

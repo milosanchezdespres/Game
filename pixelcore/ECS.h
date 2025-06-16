@@ -87,6 +87,18 @@ namespace px
     };
 
 //--------------------------------------
+    struct ISystem
+    {
+        ISystem() = default;
+        virtual ~ISystem(){}
+
+        virtual void update(){}
+    };
+
+
+    template <typename T> struct System;
+
+//--------------------------------------
     struct ecs : public Singleton<ecs>
     {
         friend class Singleton<ecs>;
@@ -100,11 +112,19 @@ namespace px
             vector<RemoveFunc> component_removers;
             unordered_map<type_index, std::function<void(void*)>> pool_deleters;
 
+            vector<ISystem*> systems;
+
         public:
             int create_entity()
             {
                 previous_entity_id++;
                 return previous_entity_id;
+            }
+
+            void update()
+            {
+                for(auto* system : systems)
+                { system->update(); }
             }
 
             template <typename T>
@@ -154,6 +174,9 @@ namespace px
                 return static_cast<ComponentPool<T>*>(pools[typeId])->actives;
             }
 
+            template <typename T>
+            void attach() { systems.push_back(new T()); }
+
             void clear()
             {
                 for (auto& [typeId, pool_ptr] : pools) { pool_deleters[typeId](pool_ptr); }
@@ -163,9 +186,27 @@ namespace px
 
                 component_removers.clear();
 
+                for (auto* sys : systems) delete sys;
+                systems.clear();
+
                 previous_entity_id = -1;
             }
 
             int size() { return previous_entity_id + 1; }
+    };
+
+//--------------------------------------
+    template <typename T>
+    struct System : public ISystem
+    {
+        System() : ISystem() {}
+
+        void update() override
+        {
+            for(auto entity : ECS.each<T>())
+            { OnUpdate(ECS.component<T>(entity)); }
+        }
+
+        virtual void OnUpdate(T* component) {}
     };
 }

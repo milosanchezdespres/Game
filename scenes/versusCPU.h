@@ -8,6 +8,9 @@ using namespace px;
 #include "entities/debugEntity.h"
 //...
 
+#include "systems/DebugSystem.h"
+//...
+
 #include <iostream>
 
 struct versusCPU : public GameMode
@@ -27,6 +30,8 @@ struct versusCPU : public GameMode
 
         ECS.component<Transform>(test2)->x = 220;
         ECS.component<Transform>(test1)->y = 100;
+
+        ECS.attach<DebugSystem>();
     }
 
     void render() override
