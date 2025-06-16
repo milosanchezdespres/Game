@@ -204,9 +204,9 @@ namespace px
         void update() override
         {
             for(auto entity : ECS.each<T>())
-            { OnUpdate(ECS.component<T>(entity)); }
+            { OnUpdate(entity, ECS.component<T>(entity)); }
         }
 
-        virtual void OnUpdate(T* component) {}
+        virtual void OnUpdate(Entity entity, T* component) {}
     };
 }
