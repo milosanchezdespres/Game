@@ -7,7 +7,8 @@ namespace components
     enum class EntityType
     {
         player,
-        npc,
+        cpu,
+        unit,
         none
     };
 

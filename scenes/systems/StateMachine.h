@@ -14,11 +14,29 @@ struct StateMachine : System<State>
 
     void OnUpdate(Entity entity, State* component) override
     {
-        bool enabled = ECS.component<Flags>(entity)->enabled;
+        auto flags = ECS.component<Flags>(entity);
+        auto state_component = ECS.component<State>(entity);
+
+        bool enabled = flags->enabled;
+        EntityType type = flags->type;
+
+        StateValue state = state_component->value;
 
         if(enabled)
         {
-            //...
+            if(GAMEMODE == "versus_cpu")
+            {
+                switch(GAMESTAGE)
+                {
+                    case 0://draw phase
+                        if(flags->type == EntityType::player) state_component->value = StateValue::debug;
+                        else state_component->value = StateValue::idle;
+
+                        //draw cards...
+
+                        break;
+                }
+            }
         }
     }
 };

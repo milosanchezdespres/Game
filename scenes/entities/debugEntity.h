@@ -23,7 +23,7 @@ namespace entity
             //...
 
             ECS.add_component<State>(ID);
-            ECS.component<State>(ID)->value = StateValue::debug;
+            ECS.component<State>(ID)->value = StateValue::idle;
             //...
 
             ECS.add_component<Transform>(ID);

@@ -2,12 +2,12 @@
 
 namespace components
 {
-    enum class StateValue {
+    enum class StateValue
+    {
         idle,
         walk,
         debug
     };
-
 
     struct State
     {

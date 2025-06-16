@@ -9,8 +9,6 @@
 #define GAMEMODE GameModeManager::instance().scene->alias
 #define GAMESTAGE GameModeManager::instance().scene->stage
 
-#define STAGE_INT(e) static_cast<int>(e)
-
 namespace px
 {
     struct GameMode

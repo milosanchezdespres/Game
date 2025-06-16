@@ -17,15 +17,14 @@ using namespace px;
 
 #include <iostream>
 
-enum class versus_cpu_stage
-{
-    start_phase,
-    draw_phase,
-    choice_phase,
-    reveal_phase,
-    apply_phase,
-    end_phase
-};
+/*
+    start_phase,    0
+    draw_phase,     1
+    choice_phase,   2
+    reveal_phase,   3
+    apply_phase,    4
+    end_phase       5
+*/
 
 struct versusCPU : public GameMode
 {
@@ -37,7 +36,7 @@ struct versusCPU : public GameMode
     versusCPU() : GameMode()
     {
         alias = "versus_cpu";
-        stage = STAGE_INT(versus_cpu_stage::start_phase);
+        stage = 0;
     }
     
     ~versusCPU(){}
@@ -49,11 +48,11 @@ struct versusCPU : public GameMode
         test3 = entity::make::debug();
         test4 = entity::make::debug();
 
-        ECS.component<Transform>(test2)->x = 220;
         ECS.component<Transform>(test1)->y = 100;
-        ECS.component<Transform>(test4)->x = 320;
+        ECS.component<Flags>(test1)->type = EntityType::player;
 
-        ECS.component<State>(test4)->value = StateValue::idle;
+        ECS.component<Transform>(test2)->x = 220;
+        ECS.component<Transform>(test4)->x = 320;
 
         ECS.attach<DebugSystem>();
         ECS.attach<StateMachine>();
