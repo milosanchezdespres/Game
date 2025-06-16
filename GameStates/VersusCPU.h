@@ -5,6 +5,8 @@
 
 #include "../components/Deck.h"
 
+#include "../cards/cards.h"
+
 enum class VersusCPUPhase
 {
     INIT,
@@ -20,6 +22,8 @@ struct VersusCPU : public GameState
     Entity player;
     Entity CPU;
 
+    const int MAX_CARD_COUNT = 8;
+
     VersusCPU() : GameState()
     {
         data.turn = 0;
@@ -34,11 +38,19 @@ struct VersusCPU : public GameState
                 player = {REG.create_entity()};
                 CPU = {REG.create_entity()};
 
+                //FOR NOW WE WILL USE AVAILABLE CARDS TO FILL IN TEST DECK
+
                 player.add<Deck>();
                 CPU.add<Deck>();
 
-                player.get<Deck>()->init(8);
-                CPU.get<Deck>()->init(8);
+                player.get<Deck>()->init(MAX_CARD_COUNT);
+                CPU.get<Deck>()->init(MAX_CARD_COUNT);
+
+                for(int i = 0; i < MAX_CARD_COUNT; i++)
+                {
+                    player.get<Deck>()->add_at<LilSkele>(i);
+                    CPU.get<Deck>()->add_at<LilSkele>(i);
+                }
 
                 data.current = phase(VersusCPUPhase::Start);
                 break;
