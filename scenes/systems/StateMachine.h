@@ -21,7 +21,7 @@ struct StateMachine : System<State>
         EntityType type = flags->type;
 
         StateValue state = state_component->value;
-
+ 
         if(enabled)
         {
             if(GAMEMODE == "versus_cpu")
