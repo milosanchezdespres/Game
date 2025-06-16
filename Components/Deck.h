@@ -36,10 +36,9 @@ struct Deck
             if(index >= 0 && index < cards.size())
                 cards[index] = T();
         }
-
         template<typename T> T& card(int index) { return cards[index]; }
-
         void remove(int index) { cards.erase(cards.begin() + index); }
 
         void clear() {cards.clear(); }
+        int count() { return cards.size(); }
 };
