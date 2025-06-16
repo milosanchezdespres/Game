@@ -3,8 +3,11 @@
 #include "../pixelcore/ecs/ecs.h"
 #include "../pixelcore/GameState.h"
 
+#include "../components/CardHolder.h"
+
 enum class VersusCPUPhase
 {
+    INIT,
     Start,
     Draw,
     PlaceCard,
@@ -14,16 +17,32 @@ enum class VersusCPUPhase
 
 struct VersusCPU : public GameState
 {
+    Entity player;
+    Entity CPU;
+
     VersusCPU() : GameState()
     {
         data.turn = 0;
-        data.current = phase(VersusCPUPhase::Start);
+        data.current = phase(VersusCPUPhase::INIT);
     }
 
     void update() override
     {
         switch(data.current)
         {
+            case phase(VersusCPUPhase::INIT):
+                player = {REG.create_entity()};
+                CPU = {REG.create_entity()};
+
+                player.add<CardHolder>();
+                CPU.add<CardHolder>();
+
+                player.get<CardHolder>()->init(8);
+                CPU.get<CardHolder>()->init(8);
+
+                data.current = phase(VersusCPUPhase::Start);
+                break;
+
             case phase(VersusCPUPhase::Start):
                 // setup for turn
                 data.current = phase(VersusCPUPhase::Draw);

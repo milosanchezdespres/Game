@@ -8,7 +8,7 @@ using namespace std;
 
 int main()
 {
-    SCREEN.init("untitled", 800, 680);
+    SCREEN.init("YOKARDS", 800, 680);
 
     GAMESTATE.transition<VersusCPU>();
 
