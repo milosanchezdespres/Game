@@ -1,22 +1,24 @@
 #pragma once
 
-#define GAME_STATE GameStateManager::instance().state
+#define GAMESTATE GameStateManager::instance()
+#define phase(phase_enum) static_cast<int>(phase_enum)
 
 namespace px
 {
-    enum class Phase
+    struct GameStateData
     {
-        Start,
-        Draw,
-        PlaceCard,
-        Reveal,
-        End
+        int current = 0;
+        int turn = 0;
     };
 
     struct GameState
     {
-        Phase current = Phase::Start;
-        int turn = 0;
+        GameStateData data;
+        
+        GameState(){}
+
+        virtual void update() {}
+        virtual void render() {}
     };
 
     struct GameStateManager : public Singleton<GameStateManager>
@@ -25,39 +27,13 @@ namespace px
 
         private:
             GameStateManager() = default;
-
-        public:
             GameState state;
 
-            void update()
-            {
-                switch(state.current)
-                {
-                    case Phase::Start:
-                        // setup for turn
-                        state.current = Phase::Draw;
-                        break;
+        public:
+            template<typename T>
+            void transition() { state = T(); }
 
-                    case Phase::Draw:
-                        // draw cards
-                        state.current = Phase::PlaceCard;
-                        break;
-
-                    case Phase::PlaceCard:
-                        // wait for player action, then
-                        state.current = Phase::Reveal;
-                        break;
-
-                    case Phase::Reveal:
-                        // resolve combat or effects
-                        state.current = Phase::End;
-                        break;
-
-                    case Phase::End:
-                        state.turn++;
-                        state.current = Phase::Start;
-                        break;
-                }
-            }
+            void update() { state.update(); }
+            void render() { state.render(); }
     };
 }

@@ -2,24 +2,27 @@
 using namespace std;
 
 #include "pixelcore/ecs/ecs.h"
+#include "pixelcore/display.h"
 #include "pixelcore/GameState.h"
 
-struct CardComponent
-{
-    const char* text = "...";
-};
+#include "GameStates/VersusCPU.h"
 
 int main()
 {
-    Entity test = {REG.create_entity()};
+    SCREEN.init("untitled", 800, 680);
 
-    test.add<CardComponent>();
+    GAMESTATE.transition<VersusCPU>();
 
-    cout << test.get<CardComponent>()->text << endl;
+    while(SCREEN.active())
+    {
+        GAMESTATE.update();
 
-    cout << GAME_STATE.turn << endl;
+        SCREEN.begin_render();
 
-    REG.remove_entity(test.ID);
+        GAMESTATE.render();
 
-    return 0;
+        SCREEN.end_render();
+    }
+
+    return SCREEN.exit();
 }
