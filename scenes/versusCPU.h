@@ -40,7 +40,12 @@ struct versusCPU : public GameMode
 //DEBUG ONLY---------------------
         BMP test = BMP();
         test.load();
-        auto pixels = test.render();
+        auto pixels = test.data();
+
+        //for(int i = 0; i < pixels.size(); i++)
+        //{
+            //cout << pixels[i] << endl;
+        //}
 //DEBUG ONLY---------------------
     }
 

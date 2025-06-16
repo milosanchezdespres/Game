@@ -21,18 +21,22 @@ namespace px
 
             width = 5;
             height = 5;
+
+            palette[0] = pack("#00ffb1");
+
+            pixels.resize(width * height);
         }
 
-        vector<ub32> render()
+        vector<ub32> data()
         {
             int size = width * height;
 
-            auto pixels = PIXELS(size);
+            auto rgba_pixels = PIXELS(size);
 
             for(int i = 0; i < size; i++)
-                { set_pixel(pixels, i, pack("#00ffb1")); }
+                { set_pixel(rgba_pixels, i, palette[pixels[i]]); }
 
-            return pixels;
+            return rgba_pixels;
         }
     };
 }
