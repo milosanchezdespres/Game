@@ -8,6 +8,8 @@
 
 const std::string FOLDER = "assets";
 
+#define texture(alias) TEXTURES().get(alias)
+
 namespace px
 {
     struct TextureManager : public Singleton<TextureManager>

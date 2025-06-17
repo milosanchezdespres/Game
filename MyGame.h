@@ -29,7 +29,7 @@ struct MyGame : public IGameLoop
 
     void render() override
     {
-        SCREEN().blit(TEXTURES().get("default"), 50, 50, 2, {0, 0, 32, 32});
+        SCREEN().blit(texture("default"), 50, 50, 2, {0, 0, 32, 32});
 
         //...
     }
