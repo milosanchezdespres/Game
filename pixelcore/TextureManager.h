@@ -40,6 +40,20 @@ namespace px
             }
 
             Texture* get(std::string alias) { return textures[alias]; }
+
+            void clear()
+            {
+                for (auto& [key, tex] : textures)
+                {
+                    if (tex)
+                    {
+                        GLuint id = tex->ID();
+                        glDeleteTextures(1, &id);
+                        delete tex;
+                    }
+                }
+                textures.clear();
+            }
     };
 }
 

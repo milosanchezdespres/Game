@@ -5,6 +5,7 @@
 #include "Colors.h"
 #include "ECS.h"
 #include "Display.h"
+#include "TextureManager.h"
 
 //for debug purposes
 #define print(var) std::cout << var << std::endl
@@ -64,11 +65,17 @@ namespace px
                 gameloop->exit();
 
                 ECS().clear();
+                TEXTURES().clear();
+
                 return SCREEN().exit();
             }
 
             //when transitionning to a new scene / game mode etc..
-            void clear() { ECS().clear(); }
+            void clear(bool clear_textures = true)
+            {
+                if(clear_textures) TEXTURES().clear();
+                ECS().clear();
+            }
     };
 }
 
