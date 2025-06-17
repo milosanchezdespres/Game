@@ -18,6 +18,7 @@ struct MyGame : public IGameLoop
         //...
 
         //TO DO : HAVING A CACHE FOR ENTITIES IN GAMEBOARD
+        //TO DO : SYSTEMS
     }
 
     void update() override
@@ -30,6 +31,9 @@ struct MyGame : public IGameLoop
     void render() override
     {
         SCREEN().blit(texture("default"), 50, 50, 2);
+        SCREEN().blit(texture("default"), 150, 50, 2);
+        SCREEN().blit(texture("default"), 150, 150, 2);
+        SCREEN().blit(texture("default"), 50, 150, 2);
 
         //...
     }
