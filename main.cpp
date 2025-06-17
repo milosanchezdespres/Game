@@ -1,6 +1,5 @@
 #include "pixelcore/Colors.h"
 #include "pixelcore/Display.h"
-#include "pixelcore/Texture.h"
 using namespace px;
 
 #include <iostream>
@@ -13,15 +12,11 @@ int main()
 
     Texture* test = Texture().load("assets/default");
 
-    std::cout << test<< std::endl;
-
     while(SCREEN().active())
     {
-        //...
-
         SCREEN().begin_render(EXPAND(bgcolor));
 
-        //...
+        SCREEN().blit(test, 50, 50);
 
         SCREEN().end_render();
     }

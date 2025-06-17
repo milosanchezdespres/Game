@@ -7,7 +7,7 @@
       "command": "bash",
       "args": [
         "-c",
-        "cd /c/Users/milos/Desktop/Game && g++ -g main.cpp -I /c/Users/milos/Desktop/GLFW/include -L /c/Users/milos/Desktop/GLFW/lib-mingw-w64 -lglfw3 -lopengl32 -lgdi32 -o main.exe && ./main.exe"
+        "cd /c/Users/milos/Desktop/Game && g++ -g main.cpp -I /c/Users/milos/Desktop/GLFW/include -I /c/Users/milos/Desktop/Game/pixelcore/external_libraries/glew-2.2.0/include -L /c/Users/milos/Desktop/GLFW/lib-mingw-w64 -L /c/Users/milos/Desktop/Game/pixelcore/external_libraries/glew-2.2.0/lib/Release/x64 -lglfw3 -lglew32 -lopengl32 -lgdi32 -o main.exe && ./main.exe"
       ],
       "group": {
         "kind": "build",

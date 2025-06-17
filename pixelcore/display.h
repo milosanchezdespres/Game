@@ -1,10 +1,11 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
+#include <GL/glew.h> 
 
 #include <iostream>
 
 #include "singleton.h"
+#include "Texture.h"
 
 #define DELTA SCREEN.frameDelta
 #define FPS static_cast<int>(1.0f / DELTA) 
@@ -60,6 +61,10 @@ namespace px
                 }
 
                 init_GL(center_window);
+
+                glewExperimental = GL_TRUE;
+                if (glewInit() != GLEW_OK)
+                    std::cerr << "Failed to initialize GLEW\n";
             }
 
             bool active()
@@ -75,13 +80,31 @@ namespace px
             {
                 glClearColor(r, g, b, a);
                 glClear(GL_COLOR_BUFFER_BIT);
-
-                glEnable(GL_TEXTURE_2D);
             }
 
-            //...
+            void blit(Texture* texture, float x, float y, int scale = 1, Surface surface = { 0, 0, 0, 0 })
+            {
+                if (surface.width == 0 || surface.height == 0)
+                {
+                    surface.width = texture->width;
+                    surface.height = texture->height;
+                }
 
-            //this is only for debugging
+                float w = surface.width;
+                float h = surface.height;
+
+                glBindTexture(GL_TEXTURE_2D, texture->ID);
+
+                glBegin(GL_QUADS);
+                glTexCoord2f(0, 0); glVertex2f(x, y);
+                glTexCoord2f(1, 0); glVertex2f(x + w * scale, y);
+                glTexCoord2f(1, 1); glVertex2f(x + w * scale, y + h * scale);
+                glTexCoord2f(0, 1); glVertex2f(x, y + h * scale);
+                glEnd();
+
+                glBindTexture(GL_TEXTURE_2D, 0);
+            }
+
             void blit(float x, float y, float r, float g, float b, float a, int scale)
             {
                 glColor4f(r, g, b, a);
@@ -89,12 +112,11 @@ namespace px
                 glBegin(GL_POINTS);
                 glVertex2f(x, y);
                 glEnd();
+                glColor4f(1, 1, 1, 1);
             }
 
             void end_render()
             {   
-                //glDisable(GL_TEXTURE_2D);
-
                 glfwSwapBuffers(window);
                 glfwPollEvents();
             }
@@ -126,6 +148,8 @@ namespace px
 
                 glEnable(GL_BLEND);
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+                glEnable(GL_TEXTURE_2D);
 
                 lastTime = glfwGetTime();
                 currentTime = glfwGetTime();
