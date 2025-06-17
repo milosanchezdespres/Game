@@ -85,6 +85,18 @@ namespace px
                 pool->components[ID] = T(std::forward<Args>(args)...);
             }
 
+            template<typename T>
+            void add(EntityID ID, const T& component)
+            {
+                std::type_index index(typeid(T));
+                auto it = pools.find(index);
+
+                if(it == pools.end()) pools[index] = std::make_unique<ComponentPool<T>>();
+                auto pool = static_cast<ComponentPool<T>*>(pools[index].get());
+
+                pool->components[ID] = component;
+            }
+
             template<typename T> T* get(EntityID entity)
             {
                 std::type_index index(typeid(T));
@@ -123,6 +135,7 @@ namespace px
         EntityID ID;
 
         template<typename T, typename... Args> void add(Args&&... args) { ecs::instance().add<T>(ID, std::forward<Args>(args)...); }
+        template<typename T> void add(const T& component) { ecs::instance().add<T>(ID, component); }
         template<typename T> T* component() { return ecs::instance().get<T>(ID); }
         template<typename T> bool has() { return ecs::instance().has<T>(ID); }
         template<typename T> void remove() { ecs::instance().remove<T>(ID); }
