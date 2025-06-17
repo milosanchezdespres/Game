@@ -16,4 +16,6 @@ int main()
     test.component<TestComponent>()->x = 60;
 
     std::cout << test.component<TestComponent>()->x << std::endl;
+
+    return 0;
 }
