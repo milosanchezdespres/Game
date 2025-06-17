@@ -6,8 +6,8 @@
 
 #include "singleton.h"
 
-#define delta SCREEN.frameDelta
-#define fps static_cast<int>(1.0f / delta) 
+#define DELTA SCREEN.frameDelta
+#define FPS static_cast<int>(1.0f / DELTA) 
 
 namespace px
 {
