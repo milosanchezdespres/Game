@@ -15,12 +15,12 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "external_libraries/stb_image.h"
 
-//PNG ONLY
 
 namespace px
 {
     using Pixels = std::vector<uint32_t>;
 
+    //---------- PNG ONLY ---------------
     struct Texture
     {
         Texture() : ID(_ID), path(_path), width(_width), height(_height) {}
