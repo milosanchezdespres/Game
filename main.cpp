@@ -1,21 +1,22 @@
 #include "pixelcore/ECS.h"
+#include "pixelcore/Colors.h"
 using namespace px;
 
 #include <iostream>
 
-struct TestComponent
+struct Test
 {
-    float x,  y;
+    Color color;
 };
 
 int main()
 {
-    Entity test = NEW_ENTITY;
+    Entity test = MAKE_ENTITY;
 
-    test.add<TestComponent>();
-    test.component<TestComponent>()->x = 60;
+    test.add<Test>();
+    test.component<Test>()->color = MAKE_COLOR(0, 255, 0, 255);
 
-    std::cout << test.component<TestComponent>()->x << std::endl;
+    std::cout << test.component<Test>()->color << std::endl;
 
     return 0;
 }

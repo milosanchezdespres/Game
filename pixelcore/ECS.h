@@ -8,11 +8,11 @@
 
 #include "singleton.h"
 
-#define NEW_ENTITY {ECS().create_entity()}
+#define MAKE_ENTITY {ECS().create_entity()}
 
 namespace px
 {
-    using EntityID = uint32_t;
+    using EntityID = size_t;
 
     struct IComponentPool
     {
@@ -38,10 +38,16 @@ namespace px
         void add(EntityID ID) override
         {
             auto it = components.find(ID);
-            if(it != components.end()) components[ID] = T();
+            if(it == components.end()) components[ID] = T();
         }
 
-        T* get(EntityID ID) { return &components[ID]; }
+        T* get(EntityID ID)
+        {
+            auto it = components.find(ID);
+            if(it == components.end()) return nullptr;
+            
+            return &components[ID];
+        }
 
         void remove(EntityID ID) override
         {
