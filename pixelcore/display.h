@@ -13,9 +13,9 @@ namespace px
 {
     using std::cerr;
 
-    struct display : public Singleton<display>
+    struct Display : public Singleton<Display>
     {
-        friend class Singleton<display>;
+        friend class Singleton<Display>;
 
         private:
             const char* _title;
@@ -23,7 +23,7 @@ namespace px
 
             GLFWwindow* window;
 
-            display()
+            Display()
                 : _title(nullptr)
                 , _width(0)
                 , _height(0)
@@ -143,4 +143,4 @@ namespace px
     };
 }
 
-DEFINE_SINGLETON_ACCESSOR(px::display, SCREEN);
+DEFINE_SINGLETON_ACCESSOR(px::Display, SCREEN);
