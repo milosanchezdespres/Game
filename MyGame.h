@@ -43,9 +43,11 @@ struct MyGame : public IGameLoop
         if(y <  - texture("default")->height()) axis_y = 1;
 
         SCREEN().blit(texture("default"), x, y, 2);
-        SCREEN().blit(texture("default"), 150, 50, 2);
-        SCREEN().blit(texture("default"), 150, 150, 2);
-        SCREEN().blit(texture("default"), 50, 150, 2);
+
+        FONT->blit(LetterID::y, 200, 200, 10);
+        FONT->blit(LetterID::o, 300, 200, 10);
+        FONT->blit(LetterID::l, 400, 200, 10);
+        FONT->blit(LetterID::o, 500, 200, 10);
 
         //...
     }

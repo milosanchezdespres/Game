@@ -3,14 +3,17 @@
 #include <iostream>
 
 #include "Colors.h"
+#include "Font.h"
 #include "ECS.h"
 #include "Display.h"
-#include "TextureManager.h"
+//#include "TextureManager.h" already included in font
 
 //for debug purposes
 #define print(var) std::cout << var << std::endl
 #define aprint(var) std::cout << var
 #define print_new_line std::cout << std::endl;
+
+#define FONT BOARD().font
 
 namespace px
 {
@@ -37,6 +40,8 @@ namespace px
             nColorArr bgcolor;
 
         public:
+            Font* font;
+
             template <typename T>
             void init(const char* new_title, int width, int height, const char* _bgcolor = "#091436", bool center_window = true, bool resizable = false)
             {
@@ -49,6 +54,9 @@ namespace px
 
             int run()
             {
+                //load default font
+                font = new Font("font");
+
                 gameloop->start();
 
                 while(SCREEN().active())
