@@ -10,8 +10,6 @@ int main()
 
     auto bgcolor = NCOLOR("#9d4444");
 
-    std::cout << bgcolor << std::endl;
-
     while(SCREEN().active())
     {
         //...
