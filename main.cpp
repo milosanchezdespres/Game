@@ -16,7 +16,8 @@ int main()
     test.add<Test>();
     test.component<Test>()->color = MAKE_COLOR(0, 255, 0, 255);
 
-    std::cout << test.component<Test>()->color << std::endl;
+    std::cout << test.component<Test>()->color << endl;
+    std::cout << RGBA(test.component<Test>()->color) << std::endl;
 
     return 0;
 }
