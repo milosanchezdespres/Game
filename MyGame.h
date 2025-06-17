@@ -1,7 +1,6 @@
 #pragma once
 
 #include "pixelcore/GameBoard.h"
-using namespace px;
 
 struct MyGame : public IGameLoop
 {

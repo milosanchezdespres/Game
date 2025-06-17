@@ -79,4 +79,6 @@ namespace px
     };
 }
 
-DEFINE_SINGLETON_ACCESSOR(px::GameBoard, BOARD);
+using namespace px;//GameBoard is only included once (safe)
+
+DEFINE_SINGLETON_ACCESSOR(GameBoard, BOARD);
