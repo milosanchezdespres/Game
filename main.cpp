@@ -9,9 +9,12 @@ int main()
 {
     SCREEN().init("untitled", 800, 580);
 
-    auto bgcolor = NCOLOR("#9d4444");
+    auto bgcolor = NCOLOR("#091436");
 
     Texture* test = Texture().load("assets/default");
+
+    std::cout << test->width << std::endl;
+    std::cout << test->height << std::endl;
 
     while(SCREEN().active())
     {
