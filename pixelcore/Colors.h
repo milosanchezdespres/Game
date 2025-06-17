@@ -18,13 +18,23 @@ namespace px
             | (static_cast<Color>(a));
     }
 
-    constexpr std::array<uint8_t, 4> EXTRACT_RGBA(Color c)
+    constexpr std::array<uint8_t, 4> RGBA(Color c)
     {
         return std::array<uint8_t, 4>{
             static_cast<uint8_t>((c >> 24) & 0xFF),
             static_cast<uint8_t>((c >> 16) & 0xFF),
             static_cast<uint8_t>((c >> 8) & 0xFF),
             static_cast<uint8_t>(c & 0xFF)
+        };
+    }
+
+    constexpr std::array<float, 4> NRGBA(Color c) //NORMALIZED
+    {
+        return std::array<float, 4>{
+            static_cast<float>((c >> 24) & 0xFF) / 255.0f,
+            static_cast<float>((c >> 16) & 0xFF) / 255.0f,
+            static_cast<float>((c >> 8) & 0xFF) / 255.0f,
+            static_cast<float>(c & 0xFF) / 255.0f
         };
     }
 
@@ -54,13 +64,19 @@ namespace px
 
 namespace std
 {
-    inline std::ostream& operator<<(std::ostream& os, const std::array<uint8_t,4>& arr)
+    inline std::ostream& operator<<(std::ostream& os, const std::array<uint8_t, 4>& arr)
     {
         os << "("
            << static_cast<int>(arr[0]) << ", "
            << static_cast<int>(arr[1]) << ", "
            << static_cast<int>(arr[2]) << ", "
            << static_cast<int>(arr[3]) << ")";
+        return os;
+    }
+
+    inline std::ostream& operator<<(std::ostream& os, const std::array<float, 4>& arr)
+    {
+        os << "(" << arr[0] << ", " << arr[1] << ", " << arr[2] << ", " << arr[3] << ")";
         return os;
     }
 }
