@@ -23,22 +23,25 @@ namespace px
 
     struct Texture
     {
-        Texture() : ID(_ID), width(_width), height(_height) {}
-        Texture(const char* path) : ID(_ID), width(_width), height(_height) { load(path); }
+        Texture() : ID(_ID), path(_path), width(_width), height(_height) {}
+        Texture(const char* path) : ID(_ID), path(_path), width(_width), height(_height) { load(path); }
 
         private:
             GLuint _ID;
+            std::string _path;
             Pixels _pixels;
             int _width, _height;
 
         public:
             const int& ID;
+            const std::string& path;
             const int& width;
             const int& height;
 
-            Texture* load(const char* path)
+            Texture* load(const char* PATH)
             {
-                std::string full_path = ((std::string)(path)) + ".png";
+                std::string full_path = ((std::string)(PATH)) + ".png";
+                _path = full_path;
 
                 int channels;
                 unsigned char* rawpixels = stbi_load(full_path.c_str(), &_width, &_height, &channels, 4);
@@ -76,4 +79,19 @@ namespace px
 
             unsigned int* pixels() { return _pixels.data(); }
     };
+}
+
+namespace std
+{
+    inline std::ostream& operator<<(std::ostream& os, const px::Texture& tex)
+    {
+        os << "<texture (" << tex.width << ", " << tex.height << ", " << (tex.width * tex.height) << ") \"" << tex.path << "\">";
+        return os;
+    }
+
+    inline std::ostream& operator<<(std::ostream& os, const px::Texture* tex)
+    {
+        if (tex) os << *tex; else os << "<texture nullptr>";
+        return os;
+    }
 }

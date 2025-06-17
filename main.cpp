@@ -13,8 +13,7 @@ int main()
 
     Texture* test = Texture().load("assets/default");
 
-    std::cout << test->width << std::endl;
-    std::cout << test->height << std::endl;
+    std::cout << test<< std::endl;
 
     while(SCREEN().active())
     {
