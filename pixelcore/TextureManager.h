@@ -6,9 +6,13 @@
 #include "singleton.h"
 #include "Texture.h"
 
-const std::string FOLDER = "assets";
+const std::string FOLDER = "assets/textures";
 
+//access texturre
 #define texture(alias) TEXTURES().get(alias)
+
+//loads a texture where path = alias
+#define load_texture(alias) TEXTURES().load(alias, alias);
 
 namespace px
 {

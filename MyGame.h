@@ -10,7 +10,7 @@ struct MyGame : public IGameLoop
 
     void init() override
     {
-        TEXTURES().load("default", "default");
+        load_texture("default");
 
         //...
     }
