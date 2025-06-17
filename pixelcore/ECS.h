@@ -126,6 +126,12 @@ namespace px
                 if(it != pools.end()) static_cast<ComponentPool<T>*>(it->second.get())->remove(entity);
             }
 
+            void clear()
+            {
+                pools.clear();
+                entity_next_ID = 0;
+            }
+
         private:
             ecs() = default;
     };
