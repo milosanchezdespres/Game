@@ -16,6 +16,8 @@ struct MyGame : public IGameLoop
     void start() override
     {
         //...
+
+        //TO DO : HAVING A CACHE FOR ENTITIES IN GAMEBOARD
     }
 
     void update() override
