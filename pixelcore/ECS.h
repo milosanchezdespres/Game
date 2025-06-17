@@ -2,13 +2,13 @@
 
 #include <iostream>
 #include <cstdint>
-
 #include <unordered_map>
 #include <typeindex>
-
 #include <memory>
 
 #include "singleton.h"
+
+#define NEW_ENTITY {ECS().create_entity()}
 
 namespace px
 {

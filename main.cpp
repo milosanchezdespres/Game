@@ -10,7 +10,7 @@ struct TestComponent
 
 int main()
 {
-    Entity test = {ECS().create_entity()};
+    Entity test = NEW_ENTITY;
 
     test.add<TestComponent>();
     test.component<TestComponent>()->x = 60;
