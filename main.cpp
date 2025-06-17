@@ -1,29 +1,27 @@
-#include "pixelcore/ECS.h"
 #include "pixelcore/Colors.h"
+#include "pixelcore/Display.h"
 using namespace px;
 
 #include <iostream>
 
-struct Test
-{
-    Color color;
-};
-
 int main()
 {
-    Entity test = MAKE_ENTITY;
+    SCREEN().init("untitled", 800, 580);
 
-    test.add<Test>({COLOR("#b04830")});
+    auto bgcolor = NCOLOR("#9d4444");
 
-    auto color = test.component<Test>()->color;
-    auto rgba = RGBA(test.component<Test>()->color);
-    auto normalized = NRGBA(test.component<Test>()->color);
+    std::cout << bgcolor << std::endl;
 
-    std::cout << color      << std::endl;
-    std::cout << rgba       << std::endl;
-    std::cout << normalized << std::endl;
+    while(SCREEN().active())
+    {
+        //...
 
-    std::cout << std::endl;
+        SCREEN().begin_render(EXPAND(bgcolor));
 
-    return 0;
+        //...
+
+        SCREEN().end_render();
+    }
+
+    return SCREEN().exit();
 }

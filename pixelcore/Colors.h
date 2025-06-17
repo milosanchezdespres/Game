@@ -5,6 +5,9 @@
 #include <ostream>
 
 #define COLOR(str) MAKE_COLOR(HEX(str))
+#define NCOLOR(str) NRGBA(COLOR(str))
+
+#define EXPAND(normalized) normalized[0], normalized[1], normalized[2], normalized[3]
 
 namespace px
 {
