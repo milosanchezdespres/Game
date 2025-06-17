@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdint>
 #include <unordered_map>
+#include <vector>
 #include <typeindex>
 #include <memory>
 
@@ -31,8 +32,13 @@ namespace px
 
         ~ComponentPool()
         {
-            for(auto& [entity, component] : components)
-                remove(entity);
+            std::vector<EntityID> to_remove;
+
+            for(auto& [entity, _] : components)
+                to_remove.push_back(entity);
+            
+            for(EntityID id : to_remove)
+                remove(id);
         }
 
         void add(EntityID ID) override
