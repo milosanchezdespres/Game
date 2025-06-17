@@ -67,13 +67,16 @@ namespace px
 
             EntityID create_entity() { return entity_next_ID++; }
 
-            template<typename T> void add(EntityID ID)
+            template<typename T, typename... Args>
+            void add(EntityID ID, Args&&... args)
             {
                 std::type_index index(typeid(T));
                 auto it = pools.find(index);
 
                 if(it == pools.end()) pools[index] = std::make_unique<ComponentPool<T>>();
-                pools[index]->add(ID);
+                auto pool = static_cast<ComponentPool<T>*>(pools[index].get());
+
+                pool->components[ID] = T(std::forward<Args>(args)...);
             }
 
             template<typename T> T* get(EntityID entity)
@@ -83,6 +86,18 @@ namespace px
 
                 if(it == pools.end()) return nullptr;
                 else return static_cast<ComponentPool<T>*>(it->second.get())->get(entity);
+            }
+
+            template<typename T>
+            bool has(EntityID ID)
+            {
+                std::type_index index(typeid(T));
+
+                auto it = pools.find(index);
+                if(it == pools.end()) return false;
+                
+                auto pool = static_cast<ComponentPool<T>*>(it->second.get());
+                return pool->components.find(ID) != pool->components.end();
             }
 
             template<typename T> void remove(EntityID entity)
@@ -101,8 +116,9 @@ namespace px
     {
         EntityID ID;
 
-        template<typename T> void add() { ecs::instance().add<T>(ID); }
+        template<typename T, typename... Args> void add(Args&&... args) { ecs::instance().add<T>(ID, std::forward<Args>(args)...); }
         template<typename T> T* component() { return ecs::instance().get<T>(ID); }
+        template<typename T> bool has() { return ecs::instance().has<T>(ID); }
         template<typename T> void remove() { ecs::instance().remove<T>(ID); }
     };
 }
