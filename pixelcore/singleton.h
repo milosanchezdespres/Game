@@ -1,5 +1,8 @@
 #pragma once
 
+#define DEFINE_SINGLETON_ACCESSOR(Type, FuncName) \
+    inline Type& FuncName() { return Type::instance(); }
+
 namespace px
 {
     template <typename T>

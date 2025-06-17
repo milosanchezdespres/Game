@@ -1,27 +1,19 @@
+#include "pixelcore/ECS.h"
+using namespace px;
+
 #include <iostream>
-using namespace std;
 
-#include "pixelcore/display.h"
-#include "pixelcore/GameState.h"
-
-#include "GameStates/VersusCPU.h"
+struct TestComponent
+{
+    float x,  y;
+};
 
 int main()
 {
-    SCREEN.init("YOKARDS", 800, 680);
+    Entity test = {ECS().create_entity()};
 
-    GAMESTATE.transition<VersusCPU>();
+    test.add<TestComponent>();
+    test.component<TestComponent>()->x = 60;
 
-    while(SCREEN.active())
-    {
-        GAMESTATE.update();
-
-        SCREEN.begin_render();
-
-        GAMESTATE.render();
-
-        SCREEN.end_render();
-    }
-
-    return SCREEN.exit();
+    std::cout << test.component<TestComponent>()->x << std::endl;
 }

@@ -6,7 +6,6 @@
 
 #include "singleton.h"
 
-#define SCREEN display::instance()
 #define delta SCREEN.frameDelta
 #define fps static_cast<int>(1.0f / delta) 
 
@@ -143,3 +142,5 @@ namespace px
             }
     };
 }
+
+DEFINE_SINGLETON_ACCESSOR(px::display, SCREEN);
