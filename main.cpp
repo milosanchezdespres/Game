@@ -14,10 +14,10 @@ int main()
     Entity test = MAKE_ENTITY;
 
     test.add<Test>();
-    test.component<Test>()->color = MAKE_COLOR(0, 255, 0, 255);
+    test.component<Test>()->color = COLOR("#b04830");
 
     std::cout << test.component<Test>()->color << std::endl;
-    std::cout << RGBA(test.component<Test>()->color) << std::endl;
+    std::cout << EXTRACT_RGBA(test.component<Test>()->color) << std::endl;
 
     return 0;
 }
