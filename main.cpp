@@ -16,7 +16,7 @@ int main()
     {
         SCREEN().begin_render(EXPAND(bgcolor));
 
-        SCREEN().blit(test, 50, 50);
+        SCREEN().blit(test, 50, 50, 3);
 
         SCREEN().end_render();
     }

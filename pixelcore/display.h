@@ -86,6 +86,8 @@ namespace px
             {
                 if (surface.width == 0 || surface.height == 0)
                 {
+                    surface.x = 0;
+                    surface.y = 0;
                     surface.width = texture->width;
                     surface.height = texture->height;
                 }
@@ -95,24 +97,19 @@ namespace px
 
                 glBindTexture(GL_TEXTURE_2D, texture->ID);
 
+                float u0 = surface.x / static_cast<float>(texture->width);
+                float v0 = surface.y / static_cast<float>(texture->height);
+                float u1 = (surface.x + surface.width) / static_cast<float>(texture->width);
+                float v1 = (surface.y + surface.height) / static_cast<float>(texture->height);
+
                 glBegin(GL_QUADS);
-                glTexCoord2f(0, 0); glVertex2f(x, y);
-                glTexCoord2f(1, 0); glVertex2f(x + w * scale, y);
-                glTexCoord2f(1, 1); glVertex2f(x + w * scale, y + h * scale);
-                glTexCoord2f(0, 1); glVertex2f(x, y + h * scale);
+                    glTexCoord2f(u0, v0); glVertex2f(x, y);
+                    glTexCoord2f(u1, v0); glVertex2f(x + w * scale, y);
+                    glTexCoord2f(u1, v1); glVertex2f(x + w * scale, y + h * scale);
+                    glTexCoord2f(u0, v1); glVertex2f(x, y + h * scale);
                 glEnd();
 
                 glBindTexture(GL_TEXTURE_2D, 0);
-            }
-
-            void blit(float x, float y, float r, float g, float b, float a, int scale)
-            {
-                glColor4f(r, g, b, a);
-                glPointSize(scale);
-                glBegin(GL_POINTS);
-                glVertex2f(x, y);
-                glEnd();
-                glColor4f(1, 1, 1, 1);
             }
 
             void end_render()
