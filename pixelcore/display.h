@@ -17,7 +17,7 @@ namespace px
     struct Display : public Singleton<Display>
     {
         friend class Singleton<Display>;
-
+ 
         private:
             const char* _title;
             int _width, _height;
