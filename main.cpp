@@ -7,13 +7,14 @@ using namespace px;
 struct Test
 {
     Color color;
+    Test(const Color& c) : color(c) {}
 };
 
 int main()
 {
     Entity test = MAKE_ENTITY;
 
-    test.add<Test>({COLOR("#b04830")});
+    test.add<Test>(COLOR("#b04830"));
 
     auto rgba = EXTRACT_RGBA(test.component<Test>()->color);
 
