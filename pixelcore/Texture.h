@@ -54,6 +54,30 @@ namespace px
             return this;
         }
 
+        void apply(uint32_t tint)
+        {
+            glBindTexture(GL_TEXTURE_2D, _ID);
+
+            int size = _width * _height * 4;
+            std::vector<uint8_t> data(size);
+            glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, data.data());
+
+            uint8_t tr = (tint >> 24) & 0xFF;
+            uint8_t tg = (tint >> 16) & 0xFF;
+            uint8_t tb = (tint >> 8)  & 0xFF;
+            uint8_t ta = (tint >> 0)  & 0xFF;
+
+            for (int i = 0; i < _width * _height; ++i)
+            {
+                data[i * 4 + 0] = (data[i * 4 + 0] * tr) / 255;
+                data[i * 4 + 1] = (data[i * 4 + 1] * tg) / 255;
+                data[i * 4 + 2] = (data[i * 4 + 2] * tb) / 255;
+                data[i * 4 + 3] = (data[i * 4 + 3] * ta) / 255;
+            }
+
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, _width, _height, GL_RGBA, GL_UNSIGNED_BYTE, data.data());
+        }
+
         GLuint ID() const { return _ID; }
 
         const std::string& path() const { return _path; }

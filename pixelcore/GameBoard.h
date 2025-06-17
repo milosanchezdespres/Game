@@ -37,16 +37,23 @@ namespace px
             GameBoard() = default;
 
             IGameLoop* gameloop;
+
             nColorArr bgcolor;
+            Color default_font_color;
 
         public:
             Font* font;
 
-            template <typename T>
-            void init(const char* new_title, int width, int height, const char* _bgcolor = "#091436", bool center_window = true, bool resizable = false)
-            {
+            template <typename T> void init
+            (
+                const char* new_title, int width, int height, 
+                const char* _bgcolor = "#091436", const char* _default_font_color = "#ffffff", 
+                bool center_window = true, bool resizable = false
+            ){
                 SCREEN().init(new_title, width, height, center_window, resizable);
+
                 bgcolor = NCOLOR(_bgcolor);
+                default_font_color = MAKE_COLOR(HEXPAND(_default_font_color));
 
                 gameloop = new T();
                 gameloop->init();
@@ -54,8 +61,9 @@ namespace px
 
             int run()
             {
-                //load default font
-                font = new Font("font");
+                /*load default font //it is possible to use as many as wanted
+                //this is just the default one */
+                font = new Font("font", default_font_color);
 
                 gameloop->start();
 

@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <ostream>
 
-#define COLOR(str) MAKE_COLOR(HEX(str))
+#define COLOR(str) MAKE_COLOR(HEXPAND(str))
 #define NCOLOR(str) NRGBA(COLOR(str))
 
 #define EXPAND(rgba) rgba[0], rgba[1], rgba[2], rgba[3]
@@ -46,7 +46,8 @@ namespace px
         };
     }
 
-    constexpr std::array<uint8_t, 4> HEX(const char* s)
+    //expand a hex string color to array<uint8_t, 4>
+    constexpr std::array<uint8_t, 4> HEXPAND(const char* s)
     {
         auto hex = [](char c) constexpr -> uint8_t
         {

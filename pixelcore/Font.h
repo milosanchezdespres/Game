@@ -26,10 +26,11 @@ namespace px
             Surface& letter(LetterID ID) { return letters[static_cast<int>(ID)]; }
 
         public:
-            Font(std::string path)
+            Font(std::string path, Color color = 0xFFFFFFFF)
             {
                 alias = path;
                 load_texture(alias);
+                texture(alias)->apply(color);
 
                 int x = texture(path)->width() / 8;
                 int y = texture(path)->height() / 8;
@@ -37,6 +38,7 @@ namespace px
                 for(int j = 0; j < y; j++) { for(int i = 0; i < x; i++)
                 { letters.push_back({(float)(i * 8), (float)(j * 8), 8, 8}); } }
             }
+
             void blit(LetterID ID, float x, float y, int size)
                 { SCREEN().blit(texture(alias), x, y, size, letter(ID)); }
     };
