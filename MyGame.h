@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pixelcore/GameBoard.h"
+#include "pixelcore/TextureManager.h"
 using namespace px;
 
 struct MyGame : public IGameLoop
@@ -9,6 +10,8 @@ struct MyGame : public IGameLoop
 
     void init() override
     {
+        TEXTURES().load("default", "default");
+
         //...
     }
 
@@ -20,10 +23,14 @@ struct MyGame : public IGameLoop
     void update() override
     {
         //...
+
+        //print(FPS);
     }
 
     void render() override
     {
+        SCREEN().blit(TEXTURES().get("default"), 50, 50, 2, {0, 0, 32, 32});
+
         //...
     }
 

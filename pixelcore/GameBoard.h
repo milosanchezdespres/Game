@@ -1,8 +1,15 @@
 #pragma once
 
+#include <iostream>
+
 #include "Colors.h"
 #include "ECS.h"
 #include "Display.h"
+
+//for debug purposes
+#define print(var) std::cout << var << std::endl
+#define aprint(var) std::cout << var
+#define print_new_line std::cout << std::endl;
 
 namespace px
 {

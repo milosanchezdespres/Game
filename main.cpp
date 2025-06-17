@@ -3,7 +3,7 @@
 
 int main()
 {
-    BOARD().init<MyGame>("untitled", 800, 680);
+    BOARD().init<MyGame>("untitled", 800, 640);
 
     return BOARD().run();
 }

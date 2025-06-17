@@ -7,7 +7,7 @@
 #include "singleton.h"
 #include "Texture.h"
 
-#define DELTA SCREEN.frameDelta
+#define DELTA SCREEN().frameDelta
 #define FPS static_cast<int>(1.0f / DELTA) 
 
 namespace px
@@ -88,19 +88,19 @@ namespace px
                 {
                     surface.x = 0;
                     surface.y = 0;
-                    surface.width = texture->width;
-                    surface.height = texture->height;
+                    surface.width = texture->width();
+                    surface.height = texture->height();
                 }
 
                 float w = surface.width;
                 float h = surface.height;
 
-                glBindTexture(GL_TEXTURE_2D, texture->ID);
+                glBindTexture(GL_TEXTURE_2D, texture->ID());
 
-                float u0 = surface.x / static_cast<float>(texture->width);
-                float v0 = surface.y / static_cast<float>(texture->height);
-                float u1 = (surface.x + surface.width) / static_cast<float>(texture->width);
-                float v1 = (surface.y + surface.height) / static_cast<float>(texture->height);
+                float u0 = surface.x / static_cast<float>(texture->width());
+                float v0 = surface.y / static_cast<float>(texture->height());
+                float u1 = (surface.x + surface.width) / static_cast<float>(texture->width());
+                float v1 = (surface.y + surface.height) / static_cast<float>(texture->height());
 
                 glBegin(GL_QUADS);
                     glTexCoord2f(u0, v0); glVertex2f(x, y);
