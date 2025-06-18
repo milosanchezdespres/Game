@@ -16,7 +16,7 @@ struct TitleScene : public IGameLoop
         BGCOLOR = NCOLOR("#004b8f");
 
         load_texture_as("button1", "ui/button1");
-        load_sfx("confirm");
+        load_sfx_as("confirm", "ui/confirm");
 
         UI.add<TitleButtonHolder>();
 
