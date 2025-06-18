@@ -23,6 +23,7 @@ struct TitleScene : public IGameLoop
         UI.component<TitleButtonHolder>()->init("button1", texture("button1")->width(), texture("button1")->height(), 2, 10);
 
         UI.component<TitleButtonHolder>()->add("new");
+        UI.component<TitleButtonHolder>()->add("editor");
         UI.component<TitleButtonHolder>()->add("debug");
         UI.component<TitleButtonHolder>()->add("quit");
 
@@ -33,9 +34,19 @@ struct TitleScene : public IGameLoop
     {
         auto holder = UI.component<TitleButtonHolder>();
 
-        if (CLICK(LEFT) && holder->selected_button == 0) { play("confirm"); next_scene = ""; }
-        if (CLICK(LEFT) && holder->selected_button == 1) { play("confirm"); next_scene = "DebugScene"; }
-        if (CLICK(LEFT) && holder->selected_button == 2) { play("confirm"); next_scene = "exit"; }
+        if (CLICK(LEFT) && holder->selected_button != -1)
+        {
+            play("confirm");
+
+            switch(holder->selected_button)
+            {
+                case 0: next_scene = ""; break;
+                case 1: next_scene = "DebugScene"; break;
+                case 2: next_scene = "DebugScene"; break;
+                case 3: next_scene = "exit"; break;
+                default: next_scene = ""; break;
+            };
+        }
 
         if (next_scene != "" && sfx_done("confirm"))
         {
