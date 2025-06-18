@@ -1,14 +1,16 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
+#include <unordered_map>
+#include <functional>
+#include <cassert>
 
 #include "Colors.h"
 #include "Font.h"
 #include "ECS.h"
 #include "Display.h"
-//#include "TextureManager.h" already included in font
 
-//for debug purposes
 #define print(var) std::cout << var << std::endl
 #define aprint(var) std::cout << var
 #define print_new_line std::cout << std::endl;
@@ -20,7 +22,7 @@ namespace px
     struct IGameLoop
     {
         IGameLoop() = default;
-        ~IGameLoop() = default;
+        virtual ~IGameLoop() = default;
 
         virtual void start() {}
         virtual void update() {}
@@ -34,56 +36,95 @@ namespace px
 
         private:
             GameBoard() = default;
-            IGameLoop* gameloop;
+
+            std::unique_ptr<IGameLoop> gameloop = nullptr;
+            std::unique_ptr<IGameLoop> nextgameloop = nullptr;
+
             Color default_font_color;
+            const char* last_bgcolor = nullptr;
+
+            std::unordered_map<std::string, std::function<std::unique_ptr<IGameLoop>()>> factory_map;
+
+            void private_init()
+            {
+                bgcolor = NCOLOR(last_bgcolor);
+                if (font) delete font;
+                font = new Font("font", default_font_color);
+            }
 
         public:
-            Font* font;
+            Font* font = nullptr;
             nColorArr bgcolor;
 
-            template <typename T> void init
-            (
-                const char* new_title, int width, int height, 
-                const char* _bgcolor = "#091436", const char* _default_font_color = "#ffffff", 
-                bool center_window = true, bool resizable = false
+            template <typename T>
+            void register_scene(const std::string& name)
+            {
+                factory_map[name] = []() -> std::unique_ptr<IGameLoop> {
+                    return std::make_unique<T>();
+                };
+            }
+
+            void init(
+                const char* new_title, int width, int height,
+                const std::string& start_scene_name,
+                const char* _bgcolor = "#091436",
+                const char* _default_font_color = "#ffffff",
+                bool center_window = true,
+                bool resizable = false
             ){
                 SCREEN().init(new_title, width, height, center_window, resizable);
 
-                bgcolor = NCOLOR(_bgcolor);
+                last_bgcolor = _bgcolor;
                 default_font_color = COLOR(_default_font_color);
 
-                /*load default font //it is possible to use as many as wanted
-                //this is just the default one */
-                font = new Font("font", default_font_color);
+                private_init();
 
-                go<T>();
+                go(start_scene_name);
             }
 
-            template <typename T> void go()
+            void go(const std::string& scene_name)
             {
-                if(gameloop)
-                {
-                    gameloop->exit();
-                    
-                    TEXTURES().clear();
-                    ECS().clear();
-                }
+                auto it = factory_map.find(scene_name);
+                if (it != factory_map.end())
+                    nextgameloop = it->second();
+                else
+                    assert(false && "Scene not registered!");
+            }
 
-                gameloop = new T();
-                gameloop->start();
+            void go(std::unique_ptr<IGameLoop> new_game_loop)
+            {
+                nextgameloop = std::move(new_game_loop);
             }
 
             int run()
             {
-                while(SCREEN().active())
+                while (SCREEN().active())
                 {
-                    gameloop->update();
+                    if (nextgameloop)
+                    {
+                        if (gameloop)
+                        {
+                            gameloop->exit();
 
-                    SCREEN().begin_render(EXPAND(bgcolor));
+                            TEXTURES().clear();
+                            ECS().clear();
+                        }
 
-                    gameloop->render();
+                        private_init();
 
-                    SCREEN().end_render();
+                        gameloop = std::move(nextgameloop);
+                        gameloop->start();
+                    }
+                    else
+                    {
+                        gameloop->update();
+
+                        SCREEN().begin_render(EXPAND(bgcolor));
+
+                        gameloop->render();
+
+                        SCREEN().end_render();
+                    }
                 }
 
                 return SCREEN().exit();
@@ -91,10 +132,10 @@ namespace px
     };
 }
 
-using namespace px;//GameBoard is only included once (safe)
+using namespace px;
 
 DEFINE_SINGLETON_ACCESSOR(GameBoard, BOARD);
 
 #define BGCOLOR BOARD().bgcolor
 
-#define GOTO(T) BOARD().go<T>()
+#define GOTO(name) BOARD().go(name)

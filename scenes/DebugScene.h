@@ -32,13 +32,15 @@ struct DebugScene : public IGameLoop
 
         fps_str = std::to_string(static_cast<int>(FPS));
         fps = fps_str.c_str();
+
+        if (PRESS(SPACE)) GOTO("TitleScene");
     }
 
     void render() override
     {
         BLIT(texture("default"), x, y, 2);
 
-        FONT->write(fps, 25, 25, 4);
+        FONT->write(fps, 25, 25, 3);
         FONT->write("hello world", 100, 100, 4);
     }
 

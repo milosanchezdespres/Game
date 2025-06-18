@@ -32,9 +32,11 @@ struct TitleScene : public IGameLoop
     {
         UI.component<FPSDisplay>()->refresh(FPS);
 
+        if (PRESS(SPACE)) GOTO("DebugScene");
+
         //...
     }
-
+ 
     void render() override
     {
         auto holder = UI.component<ButtonHolder>();
