@@ -96,3 +96,5 @@ namespace px
 using namespace px;//GameBoard is only included once (safe)
 
 DEFINE_SINGLETON_ACCESSOR(GameBoard, BOARD);
+
+#define GOTO(T) BOARD().go<T>()
