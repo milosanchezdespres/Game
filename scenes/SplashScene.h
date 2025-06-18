@@ -6,7 +6,9 @@ struct SplashScreen : public IGameLoop
 {
     float timer = 0;
     float duration = 2;
+
     bool ready = false;
+    bool play_once = false;
 
     SplashScreen() : IGameLoop() {}
 
@@ -15,14 +17,20 @@ struct SplashScreen : public IGameLoop
         BGCOLOR = NCOLOR("#000000");
 
         load_sfx_as("confirm", "ui/confirm");
-
-        play("confirm");
     }
 
     void update() override
     {
+        if(ready)
+        {
+            if(!play_once)
+            {
+                play("confirm");
+                play_once = true;
+            }
 
-        if(ready && sfx_done("confirm")) GOTO("TitleScene");
+            if(play_once && sfx_done("confirm")) GOTO("TitleScene");
+        }
         else
         {
             if(timer >= duration) ready = true;
