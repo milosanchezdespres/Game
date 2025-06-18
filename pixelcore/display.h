@@ -114,9 +114,7 @@ namespace px
         }
 
         bool is_mouse_pressed(int button)
-        {
-            return glfwGetMouseButton(window, button) == GLFW_PRESS;
-        }
+            { return glfwGetMouseButton(window, button) == GLFW_PRESS; }
 
         void mouse(double& x, double& y) { glfwGetCursorPos(window, &x, &y); }
 
@@ -235,3 +233,5 @@ DEFINE_SINGLETON_ACCESSOR(px::Display, SCREEN);
 #define HOLD(key) SCREEN().is_key_hold(GLFW_KEY_##key)
 #define PRESS(key) SCREEN().is_key_pressed(GLFW_KEY_##key)
 #define CLICK(BTN) SCREEN().is_mouse_pressed(GLFW_MOUSE_BUTTON_##BTN)
+
+#define CURSOR []() { double x = 0, y = 0; SCREEN().mouse(x, y); struct { double x, y; } pos = {x, y}; return pos; }() 

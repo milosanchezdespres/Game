@@ -127,8 +127,10 @@ namespace px
                     }
                 }
 
-                return SCREEN().exit();
+                return exit();
             }
+
+            int exit() { return SCREEN().exit(); }
     };
 }
 
@@ -139,3 +141,5 @@ DEFINE_SINGLETON_ACCESSOR(GameBoard, BOARD);
 #define BGCOLOR BOARD().bgcolor
 
 #define GOTO(name) BOARD().go(name)
+
+#define EXIT BOARD().exit()
