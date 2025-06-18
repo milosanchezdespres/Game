@@ -41,7 +41,7 @@ struct TitleScene : public IGameLoop
             switch(holder->selected_button)
             {
                 case 0: next_scene = ""; break;
-                case 1: next_scene = "DebugScene"; break;
+                case 1: next_scene = ""; break;
                 case 2: next_scene = "DebugScene"; break;
                 case 3: next_scene = "exit"; break;
                 default: next_scene = ""; break;
