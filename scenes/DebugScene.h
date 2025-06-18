@@ -21,7 +21,7 @@ struct DebugScene : public IGameLoop
         load_texture("default");
         load_texture("tileset1");
 
-        load_grid(MAP, 16, 5);
+        load_grid(MAP, 16, 2);
         load_tileset("tileset1");
     }
 
@@ -44,7 +44,7 @@ struct DebugScene : public IGameLoop
         int tileindex = 0;
         float X = 0, Y = 0;
 
-        for(int i = 0; i < 350; i++)
+        for(int i = 0; i < 2250; i++)
         {
             BLIT_TILE(tileindex, X, Y);
 
