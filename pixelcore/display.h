@@ -48,7 +48,7 @@ namespace px
         float frameDelta;
         float avg_fps;
 
-        void init(const char* new_title, int new_width, int new_height, bool center_window = true, bool resizable = false)
+        void init(const char* new_title, int new_width, int new_height, bool center_window = true, bool resizable = false, bool borderless = true)
         {
             _title = new_title;
             _width = new_width;
@@ -57,6 +57,7 @@ namespace px
             if (!glfwInit()) cerr << "Failed to init GLFW\n";
 
             if(!resizable) glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+            if(borderless) glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
             window = glfwCreateWindow(width, height, title, nullptr, nullptr);
 
