@@ -6,7 +6,7 @@
 #include "singleton.h"
 #include "Texture.h"
 
-const std::string FOLDER = "assets/textures";
+const std::string TEXTURE_FOLDER = "assets/textures";
 
 //access texturre
 #define texture(alias) TEXTURES().get(alias)
@@ -27,7 +27,7 @@ namespace px
         public:
             int load(std::string alias, std::string path)
             {
-                std::string full_path = FOLDER + "/" + path;
+                std::string full_path = TEXTURE_FOLDER + "/" + path;
 
                 Texture* tex = new Texture();
                 if (!tex->load(full_path.c_str()))

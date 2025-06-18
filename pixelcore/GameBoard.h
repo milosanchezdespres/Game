@@ -10,6 +10,7 @@
 #include "Font.h"
 #include "ECS.h"
 #include "Display.h"
+#include "AudioPlayer.h"
 
 #include "FPSDisplay.h"
 
@@ -111,8 +112,9 @@ namespace px
                         {
                             gameloop->exit();
 
-                            TEXTURES().clear();
                             ECS().clear();
+                            TEXTURES().clear();
+                            SFX().clear();
                         }
 
                         private_init();
@@ -163,8 +165,9 @@ namespace px
                 {
                     gameloop->exit();
 
-                    TEXTURES().clear();
                     ECS().clear();
+                    TEXTURES().clear();
+                    SFX().clear();
                 }
 
                 return SCREEN().exit();

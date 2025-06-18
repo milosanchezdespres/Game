@@ -8,12 +8,15 @@ struct TitleScene : public IGameLoop
 {
     TitleScene() : IGameLoop() {}
 
+    const char* next_scene;
+
     void start() override
     {
         FPS_DISPLAY->scale = 3;
         BGCOLOR = NCOLOR("#004b8f");
 
         load_texture_as("button1", "ui/button1");
+        load_sfx("confirm");
 
         UI.add<TitleButtonHolder>();
 
@@ -22,18 +25,27 @@ struct TitleScene : public IGameLoop
         UI.component<TitleButtonHolder>()->add("new");
         UI.component<TitleButtonHolder>()->add("debug");
         UI.component<TitleButtonHolder>()->add("quit");
+
+        next_scene = "";
     }
 
     void update() override
     {
         auto holder = UI.component<TitleButtonHolder>();
 
-        if (CLICK(LEFT) && holder->selected_button == 0) GOTO("DebugScene");
-        if (CLICK(LEFT) && holder->selected_button == 1) GOTO("DebugScene");
-        if (CLICK(LEFT) && holder->selected_button == 2) EXIT;
+        if (CLICK(LEFT) && holder->selected_button == 0) { play("confirm"); next_scene = "DebugScene"; }
+        if (CLICK(LEFT) && holder->selected_button == 1) { play("confirm"); next_scene = "DebugScene"; }
+        if (CLICK(LEFT) && holder->selected_button == 2) { play("confirm"); next_scene = "exit"; }
+
+        if (next_scene != "" && sfx_done("confirm"))
+        {
+            if (next_scene == "exit") EXIT;
+            else GOTO(next_scene);
+        }
 
         holder->free();
     }
+
  
     void render() override
     {
@@ -86,6 +98,6 @@ struct TitleScene : public IGameLoop
 
     void exit() override
     {
-        //...
+        next_scene = "";
     }
 };
