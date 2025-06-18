@@ -1,6 +1,8 @@
 #pragma once
 
 #include "pixelcore/GameBoard.h"
+#include <deque>
+#include <numeric>
 
 struct MyGame : public IGameLoop
 {
@@ -9,27 +11,24 @@ struct MyGame : public IGameLoop
     void init() override
     {
         load_texture("default");
-
-        //...
+        fps_values.clear();
     }
 
     void start() override
     {
         //...
-
-        //TO DO : HAVING A CACHE FOR ENTITIES IN GAMEBOARD
-        //TO DO : SYSTEMS
     }
 
     void update() override
     {
         //...
-
-        //print(FPS);
     }
 
     int axis_x = 1, axis_y = 1;
-    float x, y;
+    float x = 0, y = 0;
+
+    std::deque<float> fps_values;
+    static constexpr size_t fps_buffer_size = 10;
 
     void render() override
     {
@@ -37,17 +36,19 @@ struct MyGame : public IGameLoop
         y += axis_y * (250 * DELTA);
 
         if(x > (SCREEN().width - texture("default")->width())) axis_x = -1;
-        if(x < - texture("default")->width()) axis_x = 1;
+        if(x < -texture("default")->width()) axis_x = 1;
 
         if(y > (SCREEN().height - texture("default")->height())) axis_y = -1;
-        if(y <  - texture("default")->height()) axis_y = 1;
+        if(y < -texture("default")->height()) axis_y = 1;
 
         SCREEN().blit(texture("default"), x, y, 2);
 
-        FONT->blit(LetterID::y, 200, 200, 10);
-        FONT->blit(LetterID::o, 300, 200, 10);
-        FONT->blit(LetterID::l, 400, 200, 10);
-        FONT->blit(LetterID::o, 500, 200, 10);
+        fps_values.push_back(FPS);
+        if (fps_values.size() > fps_buffer_size) fps_values.pop_front();
+
+        float avg_fps = std::accumulate(fps_values.begin(), fps_values.end(), 0.0f) / fps_values.size();
+
+        FONT->write(std::to_string(static_cast<int>(avg_fps)).c_str(), 25, 25, 4);
 
         //...
     }
