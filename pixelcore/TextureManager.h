@@ -13,6 +13,7 @@ const std::string FOLDER = "assets/textures";
 
 //loads a texture where path = alias
 #define load_texture(alias) TEXTURES().load(alias, alias);
+#define load_texture_as(alias, path) TEXTURES().load(alias, path);
 
 namespace px
 {
