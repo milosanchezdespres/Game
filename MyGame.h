@@ -7,6 +7,7 @@
 //this mess is just debugging font & fps
 int axis_x = 1, axis_y = 1;
 float x = 0, y = 0;
+float avg_fps;
 
 std::deque<float> fps_values;
 static constexpr size_t fps_buffer_size = 10;
@@ -41,7 +42,7 @@ struct MyGame : public IGameLoop
         fps_values.push_back(FPS);
         if (fps_values.size() > fps_buffer_size) fps_values.pop_front();
 
-        float avg_fps = std::accumulate(fps_values.begin(), fps_values.end(), 0.0f) / fps_values.size();
+        avg_fps = std::accumulate(fps_values.begin(), fps_values.end(), 0.0f) / fps_values.size();
     }
 
     void render() override
