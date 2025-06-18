@@ -34,6 +34,7 @@ namespace px
         virtual void exit() {}
     };
 
+    //to use gameboard properly a font.png must be in assets/textures (default font)
     struct GameBoard : public Singleton<GameBoard>
     {
         friend class Singleton<GameBoard>;
