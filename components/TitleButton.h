@@ -37,5 +37,5 @@ struct TitleButtonHolder
     TitleButton get(int index) { return buttons[index]; }
 
     void set_status(int index, int status)
-    { buttons[buttons.size() - 1].surface = {0, (float)(status * (texture_height / 2)), texture_width, texture_height / 2 }; }
+        { buttons[buttons.size() - 1].surface = {0, (float)(status * (texture_height / 2)), texture_width, texture_height / 2 }; }
 };
