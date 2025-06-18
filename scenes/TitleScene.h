@@ -13,6 +13,8 @@ struct TitleScene : public IGameLoop
 
     void start() override
     {
+        BGCOLOR = NCOLOR("#004b8f");
+
         load_texture_as("button1", "ui/button1");
 
         UI = MAKE_ENTITY;
@@ -68,7 +70,7 @@ struct TitleScene : public IGameLoop
             offsety += offset_increment_value;
         }
 
-        FONT->write(fps->text, 40, 40, holder->scale + 1);
+        FONT->write(fps->text, 20, 20, holder->scale + 1);
     }
 
     void exit() override

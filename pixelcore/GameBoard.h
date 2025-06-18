@@ -34,14 +34,12 @@ namespace px
 
         private:
             GameBoard() = default;
-
             IGameLoop* gameloop;
-
-            nColorArr bgcolor;
             Color default_font_color;
 
         public:
             Font* font;
+            nColorArr bgcolor;
 
             template <typename T> void init
             (
@@ -52,7 +50,7 @@ namespace px
                 SCREEN().init(new_title, width, height, center_window, resizable);
 
                 bgcolor = NCOLOR(_bgcolor);
-                default_font_color = MAKE_COLOR(HEXPAND(_default_font_color));
+                default_font_color = COLOR(_default_font_color);
 
                 /*load default font //it is possible to use as many as wanted
                 //this is just the default one */
@@ -96,5 +94,7 @@ namespace px
 using namespace px;//GameBoard is only included once (safe)
 
 DEFINE_SINGLETON_ACCESSOR(GameBoard, BOARD);
+
+#define BGCOLOR BOARD().bgcolor
 
 #define GOTO(T) BOARD().go<T>()
