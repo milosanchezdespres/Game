@@ -71,7 +71,7 @@ namespace px
                     return;
                 }
 
-                ma_sound_set_volume(&sounds[key], 1.0f);
+                ma_sound_set_volume(&sounds[key], 3.35f);
                 ma_sound_set_looping(&sounds[key], MA_FALSE);
             }
 
