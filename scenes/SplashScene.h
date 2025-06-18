@@ -5,7 +5,7 @@
 struct SplashScene : public IGameLoop
 {
     float timer = 0;
-    float duration = 1;
+    float duration = 3;
 
     bool ready = false;
     bool play_once = false;
