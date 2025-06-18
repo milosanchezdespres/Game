@@ -24,11 +24,11 @@ struct DebugScene : public IGameLoop
         x += axis_x * (250 * DELTA);
         y += axis_y * (250 * DELTA);
 
-        if(x > (SCREEN().width - texture("default")->width())) axis_x = -1;
-        if(x < -texture("default")->width()) axis_x = 1;
+        if(x > (SCREEN().width - (texture("default")->width() * 2))) axis_x = -1;
+        if(x < 0) axis_x = 1;
 
-        if(y > (SCREEN().height - texture("default")->height())) axis_y = -1;
-        if(y < -texture("default")->height()) axis_y = 1;
+        if(y > (SCREEN().height - (texture("default")->height() * 2))) axis_y = -1;
+        if(y < 0) axis_y = 1;
 
         fps_str = std::to_string(static_cast<int>(FPS));
         fps = fps_str.c_str();
