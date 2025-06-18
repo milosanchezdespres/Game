@@ -46,6 +46,8 @@ struct DebugScene : public IGameLoop
 
     void exit() override
     {
-        //...
+        fps = "";
+        axis_x = 1; axis_y = 1;
+        x = 0; y = 0;
     }
 };
