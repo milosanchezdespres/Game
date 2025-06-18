@@ -11,16 +11,20 @@
 #include "ECS.h"
 #include "Display.h"
 
+#include "FPSDisplay.h"
+
 #define print(var) std::cout << var << std::endl
 #define aprint(var) std::cout << var
 #define print_new_line std::cout << std::endl;
 
-#define FONT BOARD().font
-
 namespace px
 {
+    //UI entity is already included//
     struct IGameLoop
     {
+        Entity UI;
+        bool display_fps = false;
+        
         IGameLoop() = default;
         virtual ~IGameLoop() = default;
 
@@ -113,15 +117,30 @@ namespace px
                         private_init();
 
                         gameloop = std::move(nextgameloop);
+
+                        gameloop->UI = MAKE_ENTITY; 
+                        gameloop->UI.add<FPSDisplay>();
+
                         gameloop->start();
                     }
                     else
                     {
+                        gameloop->UI.component<FPSDisplay>()->refresh(FPS);
+
                         gameloop->update();
 
                         SCREEN().begin_render(EXPAND(bgcolor));
 
                         gameloop->render();
+
+                        if(gameloop->display_fps)
+                        {
+                            font->write(
+                                gameloop->UI.component<FPSDisplay>()->text, 
+                                gameloop->UI.component<FPSDisplay>()->x, 
+                                gameloop->UI.component<FPSDisplay>()->y, 
+                                gameloop->UI.component<FPSDisplay>()->scale);
+                        }
 
                         SCREEN().end_render();
                     }
@@ -129,6 +148,13 @@ namespace px
 
                 return exit();
             }
+
+            //using this function automatically enables fps display
+            FPSDisplay* fps_component()
+            {
+                gameloop->display_fps = true;
+                return gameloop->UI.component<FPSDisplay>();
+            } 
 
             int exit()
             {
@@ -149,8 +175,11 @@ using namespace px;
 
 DEFINE_SINGLETON_ACCESSOR(GameBoard, BOARD);
 
+#define FONT BOARD().font
 #define BGCOLOR BOARD().bgcolor
 
 #define GOTO(name) BOARD().go(name)
-
 #define EXIT BOARD().exit()
+
+#define FPS_DISPLAY BOARD().fps_component()
+
