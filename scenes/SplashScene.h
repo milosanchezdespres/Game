@@ -2,7 +2,7 @@
 
 #include "../pixelcore/GameBoard.h"
 
-struct SplashScreen : public IGameLoop
+struct SplashScene : public IGameLoop
 {
     float timer = 0;
     float duration = 1;
@@ -10,7 +10,7 @@ struct SplashScreen : public IGameLoop
     bool ready = false;
     bool play_once = false;
 
-    SplashScreen() : IGameLoop() {}
+    SplashScene() : IGameLoop() {}
 
     void start() override
     {

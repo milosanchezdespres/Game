@@ -6,9 +6,9 @@
 
 int main()
 {
-    BOARD().register_scene<DebugScene>("DebugScene");
-    BOARD().register_scene<SplashScreen>("SplashScene");
-    BOARD().register_scene<TitleScene>("TitleScene");
+    BOARD().upload<DebugScene>("DebugScene");
+    BOARD().upload<SplashScene>("SplashScene");
+    BOARD().upload<TitleScene>("TitleScene");
 
     BOARD().init("untitled", 800, 640, "SplashScene");
 

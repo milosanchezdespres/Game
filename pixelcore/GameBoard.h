@@ -62,14 +62,6 @@ namespace px
             Font* font = nullptr;
             nColorArr bgcolor;
 
-            template <typename T>
-            void register_scene(const std::string& name)
-            {
-                factory_map[name] = []() -> std::unique_ptr<IGameLoop> {
-                    return std::make_unique<T>();
-                };
-            }
-
             void init(
                 const char* new_title, int width, int height,
                 const std::string& start_scene_name,
@@ -86,6 +78,14 @@ namespace px
                 private_init();
 
                 go(start_scene_name);
+            }
+
+            template <typename T>
+            void upload(const std::string& name)
+            {
+                factory_map[name] = []() -> std::unique_ptr<IGameLoop> {
+                    return std::make_unique<T>();
+                };
             }
 
             void go(const std::string& scene_name)
