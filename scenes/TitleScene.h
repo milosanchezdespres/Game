@@ -22,6 +22,7 @@ struct TitleScene : public IGameLoop
         UI.component<ButtonHolder>()->init("button1", texture("button1")->width(), texture("button1")->height(), 2, 10);
 
         UI.component<ButtonHolder>()->add("new");
+        UI.component<ButtonHolder>()->add("debug");
         UI.component<ButtonHolder>()->add("quit");
     }
 
