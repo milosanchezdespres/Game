@@ -1,8 +1,6 @@
 #pragma once
 
-#include "pixelcore/GameBoard.h"
-#include <deque>
-#include <numeric>
+#include "../pixelcore/GameBoard.h"
 
 //this mess is just debugging font & fps
 int axis_x = 1, axis_y = 1;
@@ -10,19 +8,14 @@ float x = 0, y = 0;
 std::string fps_str;
 const char* fps;
 
-struct MyGame : public IGameLoop
+struct DebugScene : public IGameLoop
 {
-    MyGame() : IGameLoop() {}
+    DebugScene() : IGameLoop() {}
 
     void init() override
     {
         load_texture("default");
 
-        //...
-    }
-
-    void start() override
-    {
         //...
     }
 

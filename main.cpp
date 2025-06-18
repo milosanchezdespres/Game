@@ -1,9 +1,9 @@
 #include "pixelcore/GameBoard.h"
-#include "MyGame.h"
+#include "scenes/DebugScene.h"
 
 int main()
 {
-    BOARD().init<MyGame>("untitled", 800, 640);
+    BOARD().init<DebugScene>("untitled", 800, 640);
 
     return BOARD().run();
 }

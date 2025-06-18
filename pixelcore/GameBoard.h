@@ -23,7 +23,6 @@ namespace px
         ~IGameLoop() = default;
 
         virtual void init() {}
-        virtual void start() {}
         virtual void update() {}
         virtual void render() {}
         virtual void exit() {}
@@ -55,18 +54,29 @@ namespace px
                 bgcolor = NCOLOR(_bgcolor);
                 default_font_color = MAKE_COLOR(HEXPAND(_default_font_color));
 
+                go<T>();
+
+                /*load default font //it is possible to use as many as wanted
+                //this is just the default one */
+                font = new Font("font", default_font_color);
+            }
+
+            template <typename T> void go()
+            {
+                if(gameloop)
+                {
+                    gameloop->exit();
+                    
+                    TEXTURES().clear();
+                    ECS().clear();
+                }
+
                 gameloop = new T();
                 gameloop->init();
             }
 
             int run()
             {
-                /*load default font //it is possible to use as many as wanted
-                //this is just the default one */
-                font = new Font("font", default_font_color);
-
-                gameloop->start();
-
                 while(SCREEN().active())
                 {
                     gameloop->update();
@@ -78,19 +88,7 @@ namespace px
                     SCREEN().end_render();
                 }
 
-                gameloop->exit();
-
-                ECS().clear();
-                TEXTURES().clear();
-
                 return SCREEN().exit();
-            }
-
-            //when transitionning to a new scene / game mode etc..
-            void clear(bool clear_textures = true)
-            {
-                if(clear_textures) TEXTURES().clear();
-                ECS().clear();
             }
     };
 }
