@@ -2,7 +2,7 @@
 
 #include "../pixelcore/GameBoard.h"
 
-#include "../components/Button.h"
+#include "../components/TitleButton.h"
 #include "../components/FPSDisplay.h"
 
 struct TitleScene : public IGameLoop
@@ -18,14 +18,14 @@ struct TitleScene : public IGameLoop
         load_texture_as("button1", "ui/button1");
 
         UI = MAKE_ENTITY;
-        UI.add<ButtonHolder>();
+        UI.add<TitleButtonHolder>();
         UI.add<FPSDisplay>();
 
-        UI.component<ButtonHolder>()->init("button1", texture("button1")->width(), texture("button1")->height(), 2, 10);
+        UI.component<TitleButtonHolder>()->init("button1", texture("button1")->width(), texture("button1")->height(), 2, 10);
 
-        UI.component<ButtonHolder>()->add("new");
-        UI.component<ButtonHolder>()->add("debug");
-        UI.component<ButtonHolder>()->add("quit");
+        UI.component<TitleButtonHolder>()->add("new");
+        UI.component<TitleButtonHolder>()->add("debug");
+        UI.component<TitleButtonHolder>()->add("quit");
     }
 
     void update() override
@@ -39,7 +39,7 @@ struct TitleScene : public IGameLoop
  
     void render() override
     {
-        auto holder = UI.component<ButtonHolder>();
+        auto holder = UI.component<TitleButtonHolder>();
         auto fps = UI.component<FPSDisplay>();
 
         int btn_width = texture("button1")->width();
@@ -58,7 +58,7 @@ struct TitleScene : public IGameLoop
         int btnx = 0, btny = 0;
         int paddingx = 0, paddingy = 0;
 
-        for(Button btn : holder->buttons)
+        for(TitleButton btn : holder->buttons)
         {
             btnx = centerx;
             btny = centery + offsety;

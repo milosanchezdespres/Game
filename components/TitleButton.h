@@ -1,14 +1,14 @@
 #pragma once
 
-struct Button
+struct TitleButton
 {
     const char* text;
     Surface surface;
 };
 
-struct ButtonHolder
+struct TitleButtonHolder
 {
-    std::vector<Button> buttons;
+    std::vector<TitleButton> buttons;
 
     const char* texture_alias;
 
@@ -29,12 +29,12 @@ struct ButtonHolder
 
     void add(const char* str, int status = 0)
     {
-        buttons.push_back(Button());
+        buttons.push_back(TitleButton());
         buttons[buttons.size() - 1].text = str;
         buttons[buttons.size() - 1].surface = {0, (float)(status * (texture_height / 2)), texture_width, texture_height / 2 };
     }
 
-    Button get(int index) { return buttons[index]; }
+    TitleButton get(int index) { return buttons[index]; }
 
     void set_status(int index, int status)
     { buttons[buttons.size() - 1].surface = {0, (float)(status * (texture_height / 2)), texture_width, texture_height / 2 }; }
