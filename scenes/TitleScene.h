@@ -34,7 +34,7 @@ struct TitleScene : public IGameLoop
 
         UI.component<FPSDisplay>()->refresh(FPS);
 
-        if (PRESS(LEFT) && holder->selected_button == 0) GOTO("DebugScene");
+        if (CLICK(LEFT) && holder->selected_button == 0) GOTO("DebugScene");
         if (CLICK(LEFT) && holder->selected_button == 1) GOTO("DebugScene");
         if (CLICK(LEFT) && holder->selected_button == 2) EXIT;
 
