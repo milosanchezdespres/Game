@@ -1,6 +1,9 @@
 main.exe
-glew32.dll
-external_libraries
+
 libgcc_s_seh-1.dll
 libstdc++-6.dll
 libwinpthread-1.dll
+
+glew32.dll
+
+external_libraries
