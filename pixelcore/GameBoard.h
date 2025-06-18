@@ -130,7 +130,18 @@ namespace px
                 return exit();
             }
 
-            int exit() { return SCREEN().exit(); }
+            int exit()
+            {
+                if (gameloop)
+                {
+                    gameloop->exit();
+
+                    TEXTURES().clear();
+                    ECS().clear();
+                }
+
+                return SCREEN().exit();
+            }
     };
 }
 
