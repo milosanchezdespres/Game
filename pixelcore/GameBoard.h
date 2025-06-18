@@ -54,11 +54,11 @@ namespace px
                 bgcolor = NCOLOR(_bgcolor);
                 default_font_color = MAKE_COLOR(HEXPAND(_default_font_color));
 
-                go<T>();
-
                 /*load default font //it is possible to use as many as wanted
                 //this is just the default one */
                 font = new Font("font", default_font_color);
+
+                go<T>();
             }
 
             template <typename T> void go()
