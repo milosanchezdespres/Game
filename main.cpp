@@ -10,7 +10,7 @@ int main()
     BOARD().upload<SplashScene>("SplashScene");
     BOARD().upload<TitleScene>("TitleScene");
 
-    BOARD().init("untitled", 800, 640, "SplashScene");
+    BOARD().init("untitled", "SplashScene");
 
     return BOARD().run();
 }

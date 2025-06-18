@@ -74,6 +74,38 @@ namespace px
                 std::cerr << "Failed to initialize GLEW\n";
         }
 
+        void init(const char* new_title)
+        {
+            _title = new_title;
+
+            if (!glfwInit()) cerr << "Failed to init GLFW\n";
+
+            GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+            const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+            _width = mode->width;
+            _height = mode->height;
+
+            glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+            glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+            glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+            glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+            window = glfwCreateWindow(width, height, title, monitor, nullptr);
+
+            if (!window)
+            {
+                std::cerr << "Failed to create GLFW window\n";
+                glfwTerminate();
+            }
+
+            init_GL(false);
+
+            glewExperimental = GL_TRUE;
+            if (glewInit() != GLEW_OK)
+                std::cerr << "Failed to initialize GLEW\n";
+        }
+
         bool active()
         {
             currentTime = glfwGetTime();
@@ -235,4 +267,4 @@ DEFINE_SINGLETON_ACCESSOR(px::Display, SCREEN);
 #define PRESS(key) SCREEN().is_key_pressed(GLFW_KEY_##key)
 #define CLICK(BTN) SCREEN().is_mouse_pressed(GLFW_MOUSE_BUTTON_##BTN)
 
-#define CURSOR []() { double x = 0, y = 0; SCREEN().mouse(x, y); struct { double x, y; } pos = {x, y}; return pos; }() 
+#define CURSOR []() { double x = 0, y = 0; SCREEN().mouse(x, y); struct { double x, y; } pos = {x, y}; return pos; }()

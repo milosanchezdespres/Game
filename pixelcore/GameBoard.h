@@ -80,6 +80,22 @@ namespace px
                 go(start_scene_name);
             }
 
+            void init(
+                const char* new_title, 
+                const std::string& start_scene_name,
+                const char* _bgcolor = "#091436",
+                const char* _default_font_color = "#ffffff"
+            ){
+                SCREEN().init(new_title);
+
+                last_bgcolor = _bgcolor;
+                default_font_color = COLOR(_default_font_color);
+
+                private_init();
+
+                go(start_scene_name);
+            }
+
             template <typename T>
             void upload(const std::string& name)
             {

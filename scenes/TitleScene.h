@@ -65,7 +65,7 @@ struct TitleScene : public IGameLoop
         int btn_width = texture("button1")->width();
         int btn_height = texture("button1")->height() / 2;
 
-        int btn_vertical_margin = 5;
+        int btn_vertical_margin = 10;
 
         int btn_count = holder->buttons.size();
         
