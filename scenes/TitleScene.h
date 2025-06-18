@@ -3,6 +3,7 @@
 #include "../pixelcore/GameBoard.h"
 
 #include "../components/Button.h"
+#include "../components/FPSDisplay.h"
 
 struct TitleScene : public IGameLoop
 {
@@ -16,6 +17,7 @@ struct TitleScene : public IGameLoop
 
         UI = MAKE_ENTITY;
         UI.add<ButtonHolder>();
+        UI.add<FPSDisplay>();
 
         UI.component<ButtonHolder>()->init("button1", texture("button1")->width(), texture("button1")->height(), 2, 10);
 
@@ -24,14 +26,16 @@ struct TitleScene : public IGameLoop
     }
 
     void update() override
-
     {
+        UI.component<FPSDisplay>()->refresh(FPS);
+
         //...
     }
 
     void render() override
     {
         auto holder = UI.component<ButtonHolder>();
+        auto fps = UI.component<FPSDisplay>();
 
         int btn_width = texture("button1")->width();
         int btn_height = texture("button1")->height() / 2;
@@ -62,6 +66,8 @@ struct TitleScene : public IGameLoop
 
             offsety += offset_increment_value;
         }
+
+        FONT->write(fps->text, 40, 40, holder->scale + 1);
     }
 
     void exit() override
