@@ -52,6 +52,7 @@ struct MyGame : public IGameLoop
         float avg_fps = std::accumulate(fps_values.begin(), fps_values.end(), 0.0f) / fps_values.size();
 
         FONT->write(std::to_string(static_cast<int>(avg_fps)).c_str(), 25, 25, 4);
+        FONT->write("hello world", 100, 100, 4);
 
         //...
     }
