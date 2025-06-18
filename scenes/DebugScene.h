@@ -2,11 +2,16 @@
 
 #include "../pixelcore/GameBoard.h"
 
+#include "../components/Grid.h"
+#include "../components/Tileset.h"
+
 int axis_x = 1, axis_y = 1;
 float x = 0, y = 0;
 
 struct DebugScene : public IGameLoop
 {
+    Entity MAP;
+
     DebugScene() : IGameLoop() {}
 
     void start() override
@@ -14,8 +19,10 @@ struct DebugScene : public IGameLoop
         FPS_DISPLAY->scale = 3;
 
         load_texture("default");
+        load_texture("tileset1");
 
-        //...
+        load_grid(MAP, 16, 5);
+        load_tileset("tileset1");
     }
 
     void update() override
@@ -34,6 +41,24 @@ struct DebugScene : public IGameLoop
 
     void render() override
     {
+        int tileindex = 0;
+        float X = 0, Y = 0;
+
+        for(int i = 0; i < 350; i++)
+        {
+            BLIT_TILE(tileindex, X, Y);
+
+            X += TILESIZE;
+            if(X > SCREEN().width - TILESIZE)
+            {
+                X = 0;
+                Y += TILESIZE;
+            }
+
+            tileindex++;
+            if(tileindex > 5) tileindex = 0;
+        }
+
         BLIT(texture("default"), x, y, 2);
 
         FONT->write("hello world", 100, 100, 4);
