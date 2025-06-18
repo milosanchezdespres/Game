@@ -4,6 +4,8 @@
 #include <deque>
 #include <numeric>
 
+//this mess is just debugging font & fps
+
 struct MyGame : public IGameLoop
 {
     MyGame() : IGameLoop() {}
@@ -11,6 +13,7 @@ struct MyGame : public IGameLoop
     void init() override
     {
         load_texture("default");
+
         fps_values.clear();
     }
 
