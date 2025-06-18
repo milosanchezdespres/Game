@@ -33,7 +33,7 @@ struct TitleScene : public IGameLoop
     {
         auto holder = UI.component<TitleButtonHolder>();
 
-        if (CLICK(LEFT) && holder->selected_button == 0) { play("confirm"); next_scene = "DebugScene"; }
+        if (CLICK(LEFT) && holder->selected_button == 0) { play("confirm"); next_scene = ""; }
         if (CLICK(LEFT) && holder->selected_button == 1) { play("confirm"); next_scene = "DebugScene"; }
         if (CLICK(LEFT) && holder->selected_button == 2) { play("confirm"); next_scene = "exit"; }
 
