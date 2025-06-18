@@ -22,7 +22,7 @@ namespace px
         IGameLoop() = default;
         ~IGameLoop() = default;
 
-        virtual void init() {}
+        virtual void start() {}
         virtual void update() {}
         virtual void render() {}
         virtual void exit() {}
@@ -72,7 +72,7 @@ namespace px
                 }
 
                 gameloop = new T();
-                gameloop->init();
+                gameloop->start();
             }
 
             int run()

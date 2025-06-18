@@ -12,7 +12,7 @@ struct DebugScene : public IGameLoop
 {
     DebugScene() : IGameLoop() {}
 
-    void init() override
+    void start() override
     {
         load_texture("default");
 
