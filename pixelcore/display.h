@@ -3,12 +3,11 @@
 #include <GL/glew.h> 
 
 #include <iostream>
+#include <deque>
+#include <numeric>
 
 #include "singleton.h"
 #include "Texture.h"
-
-#define DELTA SCREEN().frameDelta
-#define FPS static_cast<int>(1.0f / DELTA) 
 
 namespace px
 {
@@ -23,6 +22,9 @@ namespace px
             int _width, _height;
 
             GLFWwindow* window;
+
+            std::deque<float> fps_values;
+            static constexpr size_t fps_buffer_size = 10;
 
             Display()
                 : _title(nullptr)
@@ -41,6 +43,7 @@ namespace px
             double lastTime;
             double currentTime;
             float frameDelta;
+            float avg_fps;
 
             void init(const char* new_title, int new_width, int new_height, bool center_window = true, bool resizable = false)
             {
@@ -72,6 +75,10 @@ namespace px
                 currentTime = glfwGetTime();
                 frameDelta = static_cast<float>(currentTime - lastTime);
                 lastTime = currentTime;
+
+                fps_values.push_back(static_cast<int>(1.0f / frameDelta));
+                if (fps_values.size() > fps_buffer_size) fps_values.pop_front();
+                avg_fps = std::accumulate(fps_values.begin(), fps_values.end(), 0.0f) / fps_values.size();
 
                 return window && !glfwWindowShouldClose(window);
             }
@@ -150,6 +157,7 @@ namespace px
 
                 lastTime = glfwGetTime();
                 currentTime = glfwGetTime();
+                fps_values.clear();
             }
 
             void center()
@@ -165,3 +173,6 @@ namespace px
 }
 
 DEFINE_SINGLETON_ACCESSOR(px::Display, SCREEN);
+
+#define DELTA SCREEN().frameDelta
+#define FPS SCREEN().avg_fps
