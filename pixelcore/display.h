@@ -176,3 +176,5 @@ DEFINE_SINGLETON_ACCESSOR(px::Display, SCREEN);
 
 #define DELTA SCREEN().frameDelta
 #define FPS SCREEN().avg_fps
+
+#define BLIT SCREEN().blit

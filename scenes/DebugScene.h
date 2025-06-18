@@ -36,7 +36,7 @@ struct DebugScene : public IGameLoop
 
     void render() override
     {
-        SCREEN().blit(texture("default"), x, y, 2);
+        BLIT(texture("default"), x, y, 2);
 
         FONT->write(fps, 25, 25, 4);
         FONT->write("hello world", 100, 100, 4);
