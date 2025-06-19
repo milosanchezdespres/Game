@@ -1,8 +1,6 @@
 #pragma once
 
-#include <vector>
-#include <unordered_map>
-#include <utility>
+#include "../core/core.h"
 
 namespace px
 {
