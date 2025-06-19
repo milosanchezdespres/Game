@@ -10,7 +10,7 @@ int main()
 
     while (screen::active())
     {
-        if (HOLD(ESCAPE)) break;
+        if (PRESS(ESCAPE)) break;
 
         screen::begin_render(GLFW_COLOR("091c36"));
 
