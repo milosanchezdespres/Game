@@ -6,6 +6,7 @@ int main()
 
     tex2D default_texture = tx::load("default");
     tex2D default_texture_blue1 = tx::apply_color(default_texture, COLOR("00defa"));
+    tex2D default_texture_bluetnt1 = tx::apply_tint(default_texture, COLOR("00defa"), 15);
 
     while (screen::active())
     {
@@ -15,7 +16,7 @@ int main()
 
         tx::blit(default_texture, 50, 50);
 
-        tx::blit(default_texture, 50, 350, 50, {0, 0, 32, 32});
+        tx::blit(default_texture_bluetnt1, 50, 350, 50, {0, 0, 32, 32});
 
         tx::blit(default_texture_blue1, 350, 350, 50);
 

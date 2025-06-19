@@ -116,7 +116,8 @@ namespace px
     inline GLuint Texture::apply_tint(GLuint baseID, uint32_t color, float percent)
     {
         if (percent < 0.f) percent = 0.f;
-        if (percent > 1.f) percent = 1.f;
+        if (percent > 100.f) percent = 100.f;
+        percent /= 100.f;
 
         auto it = _loaded.find(baseID);
         if (it == _loaded.end()) return 0;
