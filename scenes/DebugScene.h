@@ -12,7 +12,6 @@ struct DebugScene : public IScene
     ecs::view entity;
 
     bool dragging = false;
-
     float drag_offset_x = 0.f;
     float drag_offset_y = 0.f;
 
@@ -44,7 +43,7 @@ struct DebugScene : public IScene
             entity.component<Sprite>().texture.surface.height
         );
 
-        if(!dragging && is_mouse_hover && HCLICK(LEFT))
+        if(!dragging && is_mouse_hover && CLICK(LEFT))
         {
             dragging = true;
             drag_offset_x = board::cursor.x - entity.component<Pos>().x;
