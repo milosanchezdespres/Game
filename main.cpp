@@ -1,7 +1,7 @@
 #include "pixelcore/pixelcore.h"
 
 //just for debugging purpose
-struct Pos { float x, y; };
+struct Pos { float x, y; }
 struct Sprite { tx::view texture; };
 
 int main()
@@ -10,7 +10,7 @@ int main()
 
     ecs::view entity = 
     {
-        Pos{150, 150},
+        Pos{50, 50},
         Sprite{{tx::load("default"), {16, 16, 32, 32}}}
         //...
     };
