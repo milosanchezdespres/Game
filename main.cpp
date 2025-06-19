@@ -1,7 +1,7 @@
 #include "pixelcore/pixelcore.h"
 
 //just for debugging purpose
-struct Pos { float x, y; }
+struct Pos { float x, y; };
 struct Sprite { tx::view texture; };
 
 int main()
