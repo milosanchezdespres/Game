@@ -22,6 +22,8 @@ namespace px
 
         static inline bool _initialized = false;
 
+        static inline bool unload_texture_on_wipe = true;
+
         template<typename T> static void upload(std::string alias)
         {
             auto it = _scenes.find(alias);
@@ -53,6 +55,8 @@ namespace px
 
             wipe();
 
+            if(!unload_texture_on_wipe) tx::clear();
+
             return screen::exit();
         }
 
@@ -73,7 +77,7 @@ namespace px
             if (scene) scene->stop();
 
             ecs::clear();
-            tx::clear();
+            if(unload_texture_on_wipe) tx::clear();
         }
     };
 }
