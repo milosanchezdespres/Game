@@ -6,7 +6,7 @@ int main()
 
     tex2D default_texture = tx::load("default");
 
-    tx::view default_texture_blue = {default_texture, {16, 16, 32, 32}, 50, COLOR("00c8ff")}; 
+    tx::view tile = {default_texture, {16, 16, 32, 32}}; 
 
     while (screen::active())
     {
@@ -14,7 +14,7 @@ int main()
 
         screen::begin_render(GLFW_COLOR("091c36"));
 
-        default_texture_blue.blit(50, 50);
+        tile.blit(50, 50);
 
         screen::end_render();
     }
