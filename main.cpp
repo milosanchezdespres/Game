@@ -1,6 +1,7 @@
 #include "pixelcore/pixelcore.h"
 
 //just for debugging purpose
+struct Pos { float x, y; };
 struct Sprite { tx::view texture; };
 
 int main()
@@ -9,6 +10,7 @@ int main()
 
     ecs::view entity = 
     {
+        Pos{150, 150},
         Sprite{{tx::load("default"), {16, 16, 32, 32}}}
         //...
     };
@@ -19,7 +21,7 @@ int main()
 
         screen::begin_render(GLFW_COLOR("091c36"));
 
-        entity.component<Sprite>().texture.blit(50, 50);
+        entity.component<Sprite>().texture.blit(entity.component<Pos>().x, entity.component<Pos>().y);
 
         screen::end_render();
     }
