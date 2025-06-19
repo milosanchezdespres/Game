@@ -20,6 +20,7 @@ namespace px
         static const std::unordered_map<GLuint, TextureData*>& textures();
 
         //views alones are very lightweight, but careful, color & tint do create a new one
+        //you can use another view in the constructor, it will copy the texture ID directly
         using view = TextureView;
 
         private:
@@ -217,7 +218,6 @@ namespace px
         _temp.clear();
     }
 
-    //views alones are very lightweight, but careful, color & tint do create a new one
     struct TextureView
     {
         private:
