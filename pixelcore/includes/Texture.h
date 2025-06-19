@@ -15,6 +15,9 @@ namespace px
         static GLuint apply_tint(GLuint baseID, uint32_t color, float percent);
         static void blit(GLuint texID, float x, float y, float scale = 100.f, Surface surface = { 0, 0, 0, 0 });
 
+        static void clear();
+        static const std::unordered_map<GLuint, TextureData*>& textures();
+
     private:
         static inline std::unordered_map<GLuint, TextureData*> _loaded;
         static inline std::vector<uint8_t> _temp;
@@ -197,8 +200,22 @@ namespace px
 
         glBindTexture(GL_TEXTURE_2D, 0);
     }
+
+    inline void Texture::clear()
+    {
+        for (auto& [id, data] : _loaded)
+        {
+            glDeleteTextures(1, &id);
+            delete data;
+        }
+        _loaded.clear();
+        _temp.clear();
+    }
+
+    inline const std::unordered_map<GLuint, TextureData*>& Texture::textures() { return _loaded; }
 }
 
 #define tx Texture
 #define txd TextureData
 #define tex2D int
+#define all_textures auto& [ID, DATA] : tx::textures()
