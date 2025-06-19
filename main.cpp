@@ -8,10 +8,13 @@ int main()
 {
     screen::init("My Window", 800, 600, true, false, false);
 
+    tx::view default_texture = tx::load("default");
+    //...
+
     ecs::view entity = 
     {
         Pos{50, 50},
-        Sprite{{tx::load("default"), {16, 16, 32, 32}}}
+        Sprite{{default_texture, {16, 16, 32, 32}}}
         //...
     };
 
