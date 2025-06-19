@@ -19,8 +19,6 @@ namespace px
         static void clear();
         static const std::unordered_map<GLuint, TextureData*>& textures();
 
-        //views alones are very lightweight, but careful, color & tint do create a new one
-        //you can use another view in the constructor, it will copy the texture ID directly
         using view = TextureView;
 
         private:
@@ -164,10 +162,8 @@ namespace px
 
         TextureData* newData = new TextureData;
         newData->id = newID;
-
         newData->width = base->width;
         newData->height = base->height;
-
         _loaded[newID] = newData;
 
         return newID;
@@ -226,66 +222,55 @@ namespace px
     {
         private:
             GLuint _id = 0;
-            Surface _surface;
-            float _scale = 100.f;
-            float _width = 0.f;
-            float _height = 0.f;
 
         public:
-            const float& width = _width;
-            const float& height = _height;
-            Surface& surface = _surface;
-            float& scale = _scale;
+            float width = 0.f;
+            float height = 0.f;
+            Surface surface = {0, 0, 0, 0};
+            float scale = 100.f;
 
             TextureView(GLuint id = 0, Surface surface = {0, 0, 0, 0}, float scale = 100.f)
-                : _id(id), _surface(surface), _scale(scale),
-                width(_width), height(_height)
+                : _id(id), surface(surface), scale(scale)
             {
-                _width = float(surface.width);
-                _height = float(surface.height);
+                width = float(surface.width);
+                height = float(surface.height);
             }
 
             TextureView(const TextureView& view)
-                : _id(view._id), _surface(view._surface), _scale(view._scale),
-                width(_width), height(_height)
-            {
-                _width = float(_surface.width);
-                _height = float(_surface.height);
-            }
+                : _id(view._id), surface(view.surface), scale(view.scale),
+                  width(view.width), height(view.height)
+            {}
 
             TextureView(const TextureView& view, Surface surface, float scale = 100.f)
-                : _id(view._id), _surface(surface), _scale(scale),
-                width(_width), height(_height)
+                : _id(view._id), surface(surface), scale(scale)
             {
-                _width = float(surface.width);
-                _height = float(surface.height);
+                width = float(surface.width);
+                height = float(surface.height);
             }
 
             TextureView(GLuint id, Surface surface, float scale, uint32_t color)
-                : _surface(surface), _scale(scale),
-                width(_width), height(_height)
+                : surface(surface), scale(scale)
             {
                 _id = Texture::apply_color(id, color);
-                _width = float(surface.width);
-                _height = float(surface.height);
+                width = float(surface.width);
+                height = float(surface.height);
             }
 
             TextureView(GLuint id, Surface surface, float scale, uint32_t color, float percent)
-                : _surface(surface), _scale(scale),
-                width(_width), height(_height)
+                : surface(surface), scale(scale)
             {
                 _id = Texture::apply_tint(id, color, percent);
-                _width = float(surface.width);
-                _height = float(surface.height);
+                width = float(surface.width);
+                height = float(surface.height);
             }
 
-            void blit(float x, float y) const { Texture::blit(_id, x, y, _scale, _surface); }
+            void blit(float x, float y) const { Texture::blit(_id, x, y, scale, surface); }
 
             void source(Surface surface)
             {
-                _surface = surface;
-                _width = float(surface.width);
-                _height = float(surface.height);
+                this->surface = surface;
+                width = float(surface.width);
+                height = float(surface.height);
             }
 
             GLuint id() const { return _id; }

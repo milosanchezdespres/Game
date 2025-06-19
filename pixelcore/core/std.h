@@ -14,3 +14,6 @@
 #include <deque>
 #include <numeric>
 #include <cstdint>
+
+#include <algorithm>
+#include <memory>
