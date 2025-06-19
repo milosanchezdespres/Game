@@ -7,7 +7,6 @@ namespace px
     using Entity = size_t;
 
     struct ecs;
-
     inline ecs* global_ecs_ptr = nullptr;
 
     template<typename T>
