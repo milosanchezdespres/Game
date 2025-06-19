@@ -19,6 +19,7 @@ namespace px
         static void clear();
         static const std::unordered_map<GLuint, TextureData*>& textures();
 
+        //view alones are very lightweight, but careful, color & tint do create a new one
         using view = TextureView;
 
         private:
@@ -216,6 +217,7 @@ namespace px
         _temp.clear();
     }
 
+    //view alones are very lightweight, but careful, color & tint do create a new one
     struct TextureView
     {
         private:
