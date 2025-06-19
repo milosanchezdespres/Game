@@ -19,15 +19,6 @@ int main()
 
         tx::blit(default_texture_blue1, 350, 350, 50);
 
-        float x = 20;
-        
-        for(all_textures)
-        {
-            tx::blit(ID, x, 400);
-
-            x += 200;
-        }
-
         screen::end_render();
     }
 
