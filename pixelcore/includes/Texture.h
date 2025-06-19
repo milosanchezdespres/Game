@@ -217,5 +217,6 @@ namespace px
 
 #define tx Texture
 #define txd TextureData
-#define tex2D int
+#define tex2D GLuint
+
 #define all_textures auto& [ID, DATA] : tx::textures()
