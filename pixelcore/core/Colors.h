@@ -1,14 +1,12 @@
 #pragma once
 
-#include <array>
-#include <cstdint>
-#include <ostream>
+#include "std.h"
 
-#define COLOR(str) MAKE_COLOR(HEXPAND(str))
-#define NCOLOR(str) NRGBA(COLOR(str))
+#define COLOR(str) MAKE_COLOR(HEXPAND("#" str))
+#define EXPAND(arr) arr[0], arr[1], arr[2], arr[3]
 
-#define EXPAND(rgba) rgba[0], rgba[1], rgba[2], rgba[3]
-#define NEXPAND(normalized) normalized[0], normalized[1], normalized[2], normalized[3]
+#define GLFW_COLOR(str) EXPAND(NRGBA(COLOR(str)))
+#define GLFW_COLOR_FROM(r, g, b, a) EXPAND(NRGBA(MAKE_COLOR(r, g, b, a)))
 
 namespace px
 {

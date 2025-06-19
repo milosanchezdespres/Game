@@ -1,16 +1,27 @@
-#include "pixelcore/GameBoard.h"
-
-#include "scenes/DebugScene.h"
-#include "scenes/SplashScene.h"
-#include "scenes/TitleScene.h"
+#include "pixelcore/pixelcore.h"
 
 int main()
 {
-    BOARD().upload<DebugScene>("DebugScene");
-    BOARD().upload<SplashScene>("SplashScene");
-    BOARD().upload<TitleScene>("TitleScene");
+    screen::init("My Window", 800, 600, true, false, false);
 
-    BOARD().init("untitled", "SplashScene");
+    tx::load("default");
 
-    return BOARD().run();
+    tx::apply_color("default", COLOR("00defa"), "blue1");
+
+    while (screen::active())
+    {
+        if (HOLD(ESCAPE)) break;
+
+        screen::begin_render(GLFW_COLOR("091c36"));
+
+        tx::blit("default", 50, 50);
+
+        tx::blit("default", 50, 350, 50, {0, 0, 32, 32});
+
+        tx::blit("default_blue1", 350, 350, 50);
+
+        screen::end_render();
+    }
+
+    return screen::exit();
 }
