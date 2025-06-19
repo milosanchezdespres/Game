@@ -7,6 +7,7 @@ namespace px
     struct Surface { float x, y; int width, height; };
 
     struct TextureData;
+    struct TextureView;
 
     struct Texture
     {
@@ -18,11 +19,13 @@ namespace px
         static void clear();
         static const std::unordered_map<GLuint, TextureData*>& textures();
 
-    private:
-        static inline std::unordered_map<GLuint, TextureData*> _loaded;
-        static inline std::vector<uint8_t> _temp;
+        using view = TextureView;
 
-        friend struct TextureData;
+        private:
+            static inline std::unordered_map<GLuint, TextureData*> _loaded;
+            static inline std::vector<uint8_t> _temp;
+
+            friend struct TextureData;
     };
 
     struct TextureData
@@ -212,6 +215,59 @@ namespace px
         _loaded.clear();
         _temp.clear();
     }
+
+    struct TextureView
+    {
+        private:
+            GLuint _id = 0;
+            Surface _surface;
+            float _scale = 100.f;
+            float _width = 0.f;
+            float _height = 0.f;
+
+        public:
+            const float& width = _width;
+            const float& height = _height;
+            Surface& surface = _surface;
+            float& scale = _scale;
+
+            TextureView(GLuint id = 0, Surface surface = {0, 0, 0, 0}, float scale = 100.f)
+                : _id(id), _surface(surface), _scale(scale),
+                  width(_width), height(_height)
+            {
+                _width = float(surface.width);
+                _height = float(surface.height);
+            }
+
+            TextureView(GLuint id, Surface surface, uint32_t color, float scale = 100.f)
+                : _surface(surface), _scale(scale),
+                  width(_width), height(_height)
+            {
+                _id = Texture::apply_color(id, color);
+                _width = float(surface.width);
+                _height = float(surface.height);
+            }
+
+            TextureView(GLuint id, Surface surface, uint32_t color, float percent, float scale)
+                : _surface(surface), _scale(scale),
+                  width(_width), height(_height)
+            {
+                _id = Texture::apply_tint(id, color, percent);
+                _width = float(surface.width);
+                _height = float(surface.height);
+            }
+
+            void blit(float x, float y) const { Texture::blit(_id, x, y, _scale, _surface); }
+
+            void source(Surface surface)
+            {
+                _surface = surface;
+                _width = float(surface.width);
+                _height = float(surface.height);
+            }
+
+            GLuint id() const { return _id; }
+    };
 
     inline const std::unordered_map<GLuint, TextureData*>& Texture::textures() { return _loaded; }
 }
