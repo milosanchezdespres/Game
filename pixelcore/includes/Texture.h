@@ -241,7 +241,7 @@ namespace px
                 _height = float(surface.height);
             }
 
-            TextureView(GLuint id, Surface surface, uint32_t color, float scale = 100.f)
+            TextureView(GLuint id, Surface surface, float scale, uint32_t color)
                 : _surface(surface), _scale(scale),
                   width(_width), height(_height)
             {
@@ -250,7 +250,7 @@ namespace px
                 _height = float(surface.height);
             }
 
-            TextureView(GLuint id, Surface surface, uint32_t color, float percent, float scale)
+            TextureView(GLuint id, Surface surface, float scale, uint32_t color, float percent)
                 : _surface(surface), _scale(scale),
                   width(_width), height(_height)
             {

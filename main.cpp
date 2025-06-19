@@ -6,7 +6,7 @@ int main()
 
     tex2D default_texture = tx::load("default");
 
-    tx::view default_texture_blue = {default_texture, {16, 16, 32, 32}, COLOR("00c8ff"), 50 }; 
+    tx::view default_texture_blue = {default_texture, {16, 16, 32, 32}, 50, COLOR("00c8ff")}; 
 
     while (screen::active())
     {
