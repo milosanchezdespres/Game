@@ -18,7 +18,7 @@
 #include "../../build/includes/stb_image.h"
 
 //----------------------------------------------------------
-const std::string  TEXDIR = "build/debug/assets";
+const std::string  TEXDIR = "assets";
 //...
 
 //----------------------------------------------------------
