@@ -5,45 +5,24 @@
 namespace px
 {
     struct Surface { float x, y; int width, height; };
-    
+
     struct Texture
     {
-        Texture() = default;
-        Texture(const char* path) { load(path); }
-
-        Texture(const Texture&) = default;
-        Texture(Texture&&) = default;
-        Texture& operator=(const Texture&) = default;
-        Texture& operator=(Texture&&) = default;
-
-        static Texture* load(const char* PATH)
-        {
-            return load(PATH, PATH);
-        }
-
-        static Texture* load(const std::string& alias, const std::string& path)
+        static GLuint load(const char* path)
         {
             std::string full_path = std::string(TEXDIR + "/" + path) + ".png";
-            auto it = _loaded.find(alias);
-            if (it != _loaded.end()) return it->second;
-
-            Texture* tex = new Texture();
-            tex->_path = full_path;
 
             int w, h, channels;
             unsigned char* rawpixels = stbi_load(full_path.c_str(), &w, &h, &channels, 4);
             if (!rawpixels)
             {
                 std::cout << "error loading file '" << full_path << "'\n";
-                delete tex;
-                return nullptr;
+                return 0;
             }
 
-            tex->_width = float(w);
-            tex->_height = float(h);
-
-            glGenTextures(1, &tex->_ID);
-            glBindTexture(GL_TEXTURE_2D, tex->_ID);
+            GLuint texID;
+            glGenTextures(1, &texID);
+            glBindTexture(GL_TEXTURE_2D, texID);
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -55,36 +34,28 @@ namespace px
             glBindTexture(GL_TEXTURE_2D, 0);
             stbi_image_free(rawpixels);
 
-            _loaded[alias] = tex;
-            return tex;
+            _loaded[texID] = { texID, float(w), float(h), full_path };
+            return texID;
         }
 
-        static Texture* apply_color(const std::string& alias, uint32_t color, const std::string& colorName)
+        static GLuint apply_color(GLuint baseID, uint32_t color)
         {
-            auto it = _loaded.find(alias);
-            if (it == _loaded.end()) return nullptr;
+            auto it = _loaded.find(baseID);
+            if (it == _loaded.end()) return 0;
 
-            Texture* baseTex = it->second;
+            const TextureData& base = it->second;
 
-            std::string newAlias = alias + "_" + colorName;
-            auto itNew = _loaded.find(newAlias);
-            if (itNew != _loaded.end()) return itNew->second;
-
-            Texture* newTex = new Texture();
-            newTex->_width = baseTex->_width;
-            newTex->_height = baseTex->_height;
-            newTex->_path = baseTex->_path;
-
-            glGenTextures(1, &newTex->_ID);
-            glBindTexture(GL_TEXTURE_2D, newTex->_ID);
+            GLuint newTexID;
+            glGenTextures(1, &newTexID);
+            glBindTexture(GL_TEXTURE_2D, newTexID);
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-            int size = int(newTex->_width * newTex->_height * 4);
-            newTex->_data.resize(size);
+            int size = int(base.width * base.height * 4);
+            _tempData.resize(size);
 
             uint8_t cr = (color >> 24) & 0xFF;
             uint8_t cg = (color >> 16) & 0xFF;
@@ -93,45 +64,35 @@ namespace px
 
             for (int i = 0; i < size; i += 4)
             {
-                newTex->_data[i + 0] = cr;
-                newTex->_data[i + 1] = cg;
-                newTex->_data[i + 2] = cb;
-                newTex->_data[i + 3] = ca;
+                _tempData[i + 0] = cr;
+                _tempData[i + 1] = cg;
+                _tempData[i + 2] = cb;
+                _tempData[i + 3] = ca;
             }
 
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, int(newTex->_width), int(newTex->_height), 0, GL_RGBA, GL_UNSIGNED_BYTE, newTex->_data.data());
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, int(base.width), int(base.height), 0, GL_RGBA, GL_UNSIGNED_BYTE, _tempData.data());
 
             glBindTexture(GL_TEXTURE_2D, 0);
 
-            _loaded[newAlias] = newTex;
-            return newTex;
+            _loaded[newTexID] = { newTexID, base.width, base.height, base.path };
+            return newTexID;
         }
 
-        static Texture* apply_tint(const std::string& alias, uint32_t color, float percent, const std::string& tintName)
+        static GLuint apply_tint(GLuint baseID, uint32_t color, float percent)
         {
             if (percent < 0.f) percent = 0.f;
-            if (percent > 100.f) percent = 100.f;
-            percent /= 100.f;
+            if (percent > 1.f) percent = 1.f;
 
-            auto it = _loaded.find(alias);
-            if (it == _loaded.end()) return nullptr;
+            auto it = _loaded.find(baseID);
+            if (it == _loaded.end()) return 0;
 
-            Texture* baseTex = it->second;
+            const TextureData& base = it->second;
 
-            std::string newAlias = alias + "_" + tintName;
-            auto itNew = _loaded.find(newAlias);
-            if (itNew != _loaded.end()) return itNew->second;
+            int size = int(base.width * base.height * 4);
+            _tempData.resize(size);
 
-            Texture* newTex = new Texture();
-            newTex->_width = baseTex->_width;
-            newTex->_height = baseTex->_height;
-            newTex->_path = baseTex->_path;
-
-            int size = int(newTex->_width * newTex->_height * 4);
-            newTex->_data.resize(size);
-
-            glBindTexture(GL_TEXTURE_2D, baseTex->_ID);
-            glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, newTex->_data.data());
+            glBindTexture(GL_TEXTURE_2D, base.id);
+            glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, _tempData.data());
 
             uint8_t cr = (color >> 24) & 0xFF;
             uint8_t cg = (color >> 16) & 0xFF;
@@ -140,61 +101,56 @@ namespace px
 
             for (int i = 0; i < size; i += 4)
             {
-                float alpha = newTex->_data[i + 3] / 255.f;
                 float inv = 1.f - percent;
-                newTex->_data[i + 0] = uint8_t(newTex->_data[i + 0] * inv + cr * percent * alpha);
-                newTex->_data[i + 1] = uint8_t(newTex->_data[i + 1] * inv + cg * percent * alpha);
-                newTex->_data[i + 2] = uint8_t(newTex->_data[i + 2] * inv + cb * percent * alpha);
-                newTex->_data[i + 3] = uint8_t(newTex->_data[i + 3] * inv + ca * percent * alpha);
+                _tempData[i + 0] = uint8_t(_tempData[i + 0] * inv + cr * percent);
+                _tempData[i + 1] = uint8_t(_tempData[i + 1] * inv + cg * percent);
+                _tempData[i + 2] = uint8_t(_tempData[i + 2] * inv + cb * percent);
+                _tempData[i + 3] = uint8_t(_tempData[i + 3] * inv + ca * percent);
             }
 
-            glGenTextures(1, &newTex->_ID);
-            glBindTexture(GL_TEXTURE_2D, newTex->_ID);
+            GLuint newTexID;
+            glGenTextures(1, &newTexID);
+            glBindTexture(GL_TEXTURE_2D, newTexID);
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, int(newTex->_width), int(newTex->_height), 0, GL_RGBA, GL_UNSIGNED_BYTE, newTex->_data.data());
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, int(base.width), int(base.height), 0, GL_RGBA, GL_UNSIGNED_BYTE, _tempData.data());
 
             glBindTexture(GL_TEXTURE_2D, 0);
 
-            _loaded[newAlias] = newTex;
-            return newTex;
+            _loaded[newTexID] = { newTexID, base.width, base.height, base.path };
+            return newTexID;
         }
 
-        static Texture* get(const std::string& alias)
+        static void blit(GLuint texID, float x, float y, float scale = 100.f, Surface surface = {0,0,0,0})
         {
-            auto it = _loaded.find(alias);
-            if (it != _loaded.end()) return it->second;
-            return nullptr;
-        }
+            auto it = _loaded.find(texID);
+            if (it == _loaded.end()) return;
 
-        static void blit(const std::string& alias, float x, float y, float scale = 100.f, Surface surface = { 0, 0, 0, 0 })
-        {
-            Texture* texture = get(alias);
-            if (!texture) return;
+            const TextureData& tex = it->second;
 
             if (surface.width == 0 || surface.height == 0)
             {
                 surface.x = 0;
                 surface.y = 0;
-                surface.width = static_cast<int>(texture->width);
-                surface.height = static_cast<int>(texture->height);
+                surface.width = int(tex.width);
+                surface.height = int(tex.height);
             }
 
-            float w = static_cast<float>(surface.width);
-            float h = static_cast<float>(surface.height);
+            float w = float(surface.width);
+            float h = float(surface.height);
             float scaled_w = w * (scale * 0.01f);
             float scaled_h = h * (scale * 0.01f);
 
-            glBindTexture(GL_TEXTURE_2D, texture->ID);
+            glBindTexture(GL_TEXTURE_2D, tex.id);
 
-            float u0 = surface.x / texture->width;
-            float v0 = surface.y / texture->height;
-            float u1 = (surface.x + surface.width) / texture->width;
-            float v1 = (surface.y + surface.height) / texture->height;
+            float u0 = surface.x / tex.width;
+            float v0 = surface.y / tex.height;
+            float u1 = (surface.x + surface.width) / tex.width;
+            float v1 = (surface.y + surface.height) / tex.height;
 
             glBegin(GL_QUADS);
                 glTexCoord2f(u0, v0); glVertex2f(x, y);
@@ -206,21 +162,17 @@ namespace px
             glBindTexture(GL_TEXTURE_2D, 0);
         }
 
-        const GLuint& ID = _ID;
-        const std::string& path = _path;
-        
-        const float& width = _width;
-        const float& height = _height;
+        struct TextureData
+        {
+            GLuint id = 0;
+            float width = 0.f;
+            float height = 0.f;
+            std::string path;
+        };
 
     private:
-        GLuint _ID = 0;
-        std::string _path;
-
-        float _width = 0.f;
-        float _height = 0.f;
-
-        std::vector<uint8_t> _data;
-        static inline std::unordered_map<std::string, Texture*> _loaded;
+        static inline std::unordered_map<GLuint, TextureData> _loaded;
+        static inline std::vector<uint8_t> _tempData;
     };
 }
 
