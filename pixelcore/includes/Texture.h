@@ -201,3 +201,4 @@ namespace px
 
 #define tx Texture
 #define txd TextureData
+#define tex2D int
