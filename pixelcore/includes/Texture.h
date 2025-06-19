@@ -164,9 +164,12 @@ namespace px
 
         TextureData* newData = new TextureData;
         newData->id = newID;
+
         newData->width = base->width;
         newData->height = base->height;
+
         _loaded[newID] = newData;
+
         return newID;
     }
 
@@ -214,6 +217,7 @@ namespace px
             glDeleteTextures(1, &id);
             delete data;
         }
+        
         _loaded.clear();
         _temp.clear();
     }

@@ -29,5 +29,7 @@ int main()
         screen::end_render();
     }
 
+    tx::clear();
+
     return screen::exit();
 }
