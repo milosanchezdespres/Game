@@ -31,6 +31,12 @@ struct DebugScene : public IScene
         if(HOLD(S)) entity.component<Pos>().y += entity.component<Velocity>().x * screen::delta;
         if(HOLD(A) || HOLD(Q)) entity.component<Pos>().x -= entity.component<Velocity>().x * screen::delta;
         if(HOLD(D)) entity.component<Pos>().x += entity.component<Velocity>().x * screen::delta;
+
+        if(HCLICK(LEFT) || CLICK(RIGHT))
+        {
+            entity.component<Pos>().x = board::cursor.x;
+            entity.component<Pos>().y = board::cursor.y;
+        }
     }
 
     void render() override

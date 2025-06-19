@@ -15,6 +15,7 @@ namespace px
             static constexpr size_t fps_buffer_size = 10;
 
             static inline std::unordered_map<int, bool> key_press_state;
+            static inline std::unordered_map<int, bool> mouse_press_state;
 
             static inline GLFWwindow* window = nullptr;
 
@@ -160,6 +161,12 @@ namespace px
                         pressed = false;
                 }
 
+                for(auto& [btn, pressed] : mouse_press_state)
+                {
+                    if (glfwGetMouseButton(window, btn) == GLFW_RELEASE)
+                        pressed = false;
+                }
+
                 return !glfwWindowShouldClose(window);
             }
 
@@ -184,6 +191,29 @@ namespace px
             }
 
             static bool is_mouse_pressed(int button) { return glfwGetMouseButton(window, button) == GLFW_PRESS; }
+
+            static bool is_mouse_clicked(int button)
+            {
+                if (glfwGetMouseButton(window, button) == GLFW_PRESS)
+                {
+                    if (!mouse_press_state[button])
+                    {
+                        mouse_press_state[button] = true;
+                        return true;
+                    }
+                    return false;
+                }
+                else
+                {
+                    mouse_press_state[button] = false;
+                    return false;
+                }
+            }
+
+            static bool is_mouse_held(int button)
+            {
+                return glfwGetMouseButton(window, button) == GLFW_PRESS;
+            }
 
             static void mouse(double& x, double& y) { glfwGetCursorPos(window, &x, &y); }
 
@@ -220,5 +250,7 @@ namespace px
 
 #define HOLD(key) px::Display::is_key_hold(GLFW_KEY_##key)
 #define PRESS(key) px::Display::is_key_pressed(GLFW_KEY_##key)
+#define CLICK(button) px::Display::is_mouse_clicked(GLFW_MOUSE_BUTTON_##button)
+#define HCLICK(button) px::Display::is_mouse_held(GLFW_MOUSE_BUTTON_##button)
 
 #define screen Display

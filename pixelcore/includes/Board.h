@@ -4,6 +4,8 @@
 
 namespace px
 {
+    struct Cursor { double x, y; };
+    
     struct IScene
     {
         IScene() = default;
@@ -21,7 +23,8 @@ namespace px
         static inline IScene* scene = nullptr;
 
         static inline bool _initialized = false;
-
+        
+        static inline Cursor cursor;
         static inline bool unload_texture_on_wipe = true;
 
         template<typename T> static void upload(std::string alias)
@@ -43,6 +46,8 @@ namespace px
             while (screen::active())
             {
                 if (PRESS(ESCAPE)) break;
+
+                screen::mouse(cursor.x, cursor.y);
 
                 if(scene) scene->update();
 
