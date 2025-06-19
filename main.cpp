@@ -12,9 +12,14 @@ int main()
     {
         if (PRESS(ESCAPE)) break;
 
+        print(screen::fps);
+
         screen::begin_render(GLFW_COLOR("091c36"));
 
         tile.blit(50, 50);
+        tile.blit(150, 50);
+        tile.blit(150, 150);
+        tile.blit(50, 150);
 
         screen::end_render();
     }
