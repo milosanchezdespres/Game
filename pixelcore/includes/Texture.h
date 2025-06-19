@@ -235,7 +235,23 @@ namespace px
 
             TextureView(GLuint id = 0, Surface surface = {0, 0, 0, 0}, float scale = 100.f)
                 : _id(id), _surface(surface), _scale(scale),
-                  width(_width), height(_height)
+                width(_width), height(_height)
+            {
+                _width = float(surface.width);
+                _height = float(surface.height);
+            }
+
+            TextureView(const TextureView& view)
+                : _id(view._id), _surface(view._surface), _scale(view._scale),
+                width(_width), height(_height)
+            {
+                _width = float(_surface.width);
+                _height = float(_surface.height);
+            }
+
+            TextureView(const TextureView& view, Surface surface, float scale = 100.f)
+                : _id(view._id), _surface(surface), _scale(scale),
+                width(_width), height(_height)
             {
                 _width = float(surface.width);
                 _height = float(surface.height);
@@ -243,7 +259,7 @@ namespace px
 
             TextureView(GLuint id, Surface surface, float scale, uint32_t color)
                 : _surface(surface), _scale(scale),
-                  width(_width), height(_height)
+                width(_width), height(_height)
             {
                 _id = Texture::apply_color(id, color);
                 _width = float(surface.width);
@@ -252,7 +268,7 @@ namespace px
 
             TextureView(GLuint id, Surface surface, float scale, uint32_t color, float percent)
                 : _surface(surface), _scale(scale),
-                  width(_width), height(_height)
+                width(_width), height(_height)
             {
                 _id = Texture::apply_tint(id, color, percent);
                 _width = float(surface.width);
