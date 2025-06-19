@@ -7,7 +7,8 @@ int main()
 {
     screen::init("My Window", 800, 600, true, false, false);
 
-    ecs::view entity = {
+    ecs::view entity = 
+    {
         Sprite{{tx::load("default"), {16, 16, 32, 32}}}
         //...
     };
