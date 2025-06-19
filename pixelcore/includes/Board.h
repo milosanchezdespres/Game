@@ -84,5 +84,8 @@ namespace px
             ecs::clear();
             if(unload_texture_on_wipe) tx::clear();
         }
+
+        static bool hover(float x, float y, float w, float h)
+            { return cursor.x >= x && cursor.x < x + w && cursor.y >= y && cursor.y < y + h; }
     };
 }
