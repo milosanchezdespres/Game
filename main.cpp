@@ -5,8 +5,9 @@ int main()
     screen::init("My Window", 800, 600, true, false, false);
 
     auto default_texture = tx::load("default");
-
     auto default_texture_blue1 = tx::apply_color(default_texture, COLOR("00defa"));
+
+    print(txd::get(default_texture_blue1)->width);
 
     while (screen::active())
     {
