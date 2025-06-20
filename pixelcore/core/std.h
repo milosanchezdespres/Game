@@ -15,5 +15,6 @@
 #include <numeric>
 #include <cstdint>
 
-#include <algorithm>
+#include <stack>
 #include <memory>
+#include <algorithm>

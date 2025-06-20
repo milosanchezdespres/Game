@@ -38,51 +38,107 @@ namespace px
             template<typename T>
             struct ComponentPool : IPool
             {
-                std::vector<T> _data;
-                std::unordered_map<size_t, int> entityToIndex;
-                std::vector<size_t> indexToEntity;
+                T* _data = nullptr;
+                size_t _capacity = 0;
+                size_t _size = 0;
+                std::vector<size_t> dense;
+                std::vector<size_t> sparse;
+                std::vector<size_t> freeSlots;
 
-                ComponentPool() { ecs::register_pool(this); }
-                ~ComponentPool() { ecs::unregister_pool(this); }
-
-                int add(size_t i, T& component)
+                ComponentPool()
                 {
-                    if (entityToIndex.find(i) != entityToIndex.end()) return entityToIndex[i];
-                    int index = _data.size();
-
-                    _data.push_back(std::move(component));
-
-                    entityToIndex[i] = index;
-                    indexToEntity.push_back(i);
-
-                    return index;
+                    ecs::register_pool(this);
+                    _capacity = 1024;
+                    _data = (T*) ::operator new(sizeof(T) * _capacity);
                 }
 
-                T& get(size_t i) { return _data[entityToIndex[i]]; }
-
-                void remove(size_t i)
+                ~ComponentPool()
                 {
-                    auto it = entityToIndex.find(i);
-                    if (it == entityToIndex.end()) return;
+                    clear();
+                    ::operator delete(_data);
+                    ecs::unregister_pool(this);
+                }
 
-                    int index = it->second;
-                    int last = _data.size() - 1;
+                void clear() override
+                {
+                    for (size_t i = 0; i < _size; i++) _data[i].~T();
+                    dense.clear();
+                    sparse.clear();
+                    sparse.resize(0);
+                    freeSlots.clear();
+                    _size = 0;
+                }
 
+                bool has(size_t entity)
+                {
+                    if (entity >= sparse.size()) return false;
+                    size_t index = sparse[entity];
+                    return index < _size && index < dense.size() && dense[index] == entity;
+                }
+
+                void grow()
+                {
+                    size_t newCapacity = _capacity * 2;
+                    T* newData = (T*) ::operator new(sizeof(T) * newCapacity);
+                    for (size_t i = 0; i < _size; i++) new (newData + i) T(std::move(_data[i]));
+                    for (size_t i = 0; i < _size; i++) _data[i].~T();
+                    ::operator delete(_data);
+                    _data = newData;
+                    _capacity = newCapacity;
+                }
+
+                int add(size_t entity, T& component)
+                {
+                    if (has(entity)) return (int)sparse[entity];
+
+                    if (!sparse.size()) sparse.resize(entity + 1, size_t(-1));
+                    else if (entity >= sparse.size()) sparse.resize(entity + 1, size_t(-1));
+
+                    if (freeSlots.size() > 0)
+                    {
+                        size_t slot = freeSlots.back();
+                        freeSlots.pop_back();
+                        new(_data + slot) T(std::move(component));
+                        dense[slot] = entity;
+                        sparse[entity] = slot;
+                        return (int)slot;
+                    }
+
+                    if (_size >= _capacity) grow();
+
+                    new(_data + _size) T(std::move(component));
+                    sparse[entity] = _size;
+                    dense.push_back(entity);
+
+                    return (int)(_size++);
+                }
+
+                T& get(size_t entity)
+                {
+                    return _data[sparse[entity]];
+                }
+
+                void remove(size_t entity)
+                {
+                    if (!has(entity)) return;
+
+                    size_t index = sparse[entity];
+                    _data[index].~T();
+
+                    size_t last = _size - 1;
                     if (index != last)
                     {
                         _data[index] = std::move(_data[last]);
-                        size_t moved = indexToEntity[last];
-                        entityToIndex[moved] = index;
-                        indexToEntity[index] = moved;
+                        dense[index] = dense[last];
+                        sparse[dense[index]] = index;
                     }
 
-                    _data.pop_back();
-                    indexToEntity.pop_back();
+                    dense.pop_back();
+                    sparse[entity] = size_t(-1);
+                    _size--;
 
-                    entityToIndex.erase(i);
+                    freeSlots.push_back(index);
                 }
-
-                void clear() override { _data.clear(); entityToIndex.clear(); indexToEntity.clear(); }
             };
 
             template<typename T>
@@ -117,13 +173,11 @@ namespace px
                 {
                     size_t i = _freeIndices.back();
                     _freeIndices.pop_back();
-
                     return {i, _versions[i]};
                 }
 
                 size_t i = _nextIndex++;
                 _versions.push_back(0);
-
                 return {i, 0};
             }
 
@@ -133,7 +187,6 @@ namespace px
                 if (e.index < global_ecs_ptr->_versions.size())
                 {
                     for (auto* pool : _pools) pool->remove(e.index);
-                    
                     global_ecs_ptr->_versions[e.index]++;
                     global_ecs_ptr->_freeIndices.push_back(e.index);
                 }
