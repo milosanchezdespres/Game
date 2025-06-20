@@ -98,9 +98,12 @@ namespace px
                     {
                         size_t slot = freeSlots.back();
                         freeSlots.pop_back();
+
                         new(_data + slot) T(std::move(component));
+
                         dense[slot] = entity;
                         sparse[entity] = slot;
+
                         return (int)slot;
                     }
 
@@ -113,10 +116,7 @@ namespace px
                     return (int)(_size++);
                 }
 
-                T& get(size_t entity)
-                {
-                    return _data[sparse[entity]];
-                }
+                T& get(size_t entity) { return _data[sparse[entity]]; }
 
                 void remove(size_t entity)
                 {
