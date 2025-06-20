@@ -340,7 +340,12 @@ namespace px
             struct EntityViewFactory
             {
                 virtual void _on_bake_(ecs::view& out_view) = 0;
-                void bake(view& out_view) { _on_bake_(out_view); }
+
+                void bake(view& out_view)
+                { 
+                    out_view = {};
+                    _on_bake_(out_view);
+                }
             };
     };
 
