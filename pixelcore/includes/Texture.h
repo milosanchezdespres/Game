@@ -4,7 +4,7 @@
 
 namespace px
 {
-    struct Surface { float x, y; int width, height; };
+    struct Surface { float x, y; float width, height; };
 
     struct TextureData;
     struct TextureView;

@@ -466,3 +466,5 @@ namespace px
 }
 
 #define VIEWTAG px::ecs::ViewTag{}
+#define $ = {};
+#define $$ ({});
