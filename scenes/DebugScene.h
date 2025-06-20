@@ -24,8 +24,8 @@ struct DebugScene : public IScene
     {
         default_texture = tx::load("default");
 
-        debug_entity_factory.bake(entity2, default_texture.id());
-        debug_entity_factory.bake(entity, default_texture.id());
+        entity2 = debug_entity_factory.bake(default_texture.id());
+        entity = debug_entity_factory.bake(default_texture.id());
 
         entity2.component<Pos>().x = 150;
         entity2.component<Pos>().y = 150;

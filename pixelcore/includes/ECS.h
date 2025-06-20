@@ -337,15 +337,17 @@ namespace px
             {
                 struct ArgsBase { virtual ~ArgsBase() {} };
 
-                void bake(ecs::view& out_view)
+                ecs::view bake()
                 {
+                    ecs::view out_view;
                     out_view = ecs::view();
                     _on_base_bake_(out_view);
                     _on_bake_(out_view, nullptr);
+                    return out_view;
                 }
 
                 template<typename... Args>
-                void bake(ecs::view& out_view, Args&&... args)
+                ecs::view bake(Args&&... args)
                 {
                     struct ArgsImpl : ArgsBase
                     {
@@ -355,9 +357,11 @@ namespace px
 
                     ArgsImpl packed(std::forward<Args>(args)...);
 
+                    ecs::view out_view;
                     out_view = ecs::view();
                     _on_base_bake_(out_view);
                     _on_bake_(out_view, &packed);
+                    return out_view;
                 }
 
                 void render(ecs::view& out_view) { _on_render_(out_view); }
@@ -367,6 +371,7 @@ namespace px
                 virtual void _on_bake_(ecs::view& out_view, ArgsBase* args) = 0;
                 virtual void _on_render_(ecs::view& out_view) {}
             };
+
 
     };
 
