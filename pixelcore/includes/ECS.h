@@ -335,31 +335,38 @@ namespace px
 
             struct EntityViewFactory
             {
+                struct ArgsBase { virtual ~ArgsBase() {} };
+
                 void bake(ecs::view& out_view)
                 {
                     out_view = ecs::view();
                     _on_base_bake_(out_view);
-                    _on_bake_(out_view);
+                    _on_bake_(out_view, nullptr);
                 }
 
-                void bake(ecs::view& out_view, int texture_id)
+                template<typename... Args>
+                void bake(ecs::view& out_view, Args&&... args)
                 {
+                    struct ArgsImpl : ArgsBase
+                    {
+                        std::tuple<std::decay_t<Args>...> data;
+                        ArgsImpl(Args&&... args) : data(std::forward<Args>(args)...) {}
+                    };
+
+                    ArgsImpl packed(std::forward<Args>(args)...);
+
                     out_view = ecs::view();
                     _on_base_bake_(out_view);
-                    _on_bake_with_args(out_view, texture_id);
+                    _on_bake_(out_view, &packed);
                 }
 
                 void render(ecs::view& out_view) { _on_render_(out_view); }
 
-                protected:
-                    virtual void _on_base_bake_(ecs::view& out_view) {}
-                    virtual void _on_bake_(ecs::view& out_view) = 0;
-                    virtual void _on_bake_with_args(ecs::view& out_view, int texture_id)
-                        { _on_bake_(out_view); }
-                        
-                    virtual void _on_render_(ecs::view& out_view) {}
+            protected:
+                virtual void _on_base_bake_(ecs::view& out_view) {}
+                virtual void _on_bake_(ecs::view& out_view, ArgsBase* args) = 0;
+                virtual void _on_render_(ecs::view& out_view) {}
             };
-
 
     };
 

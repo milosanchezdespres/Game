@@ -15,11 +15,13 @@ struct DebugEntityFactory : public ecs::EntityViewFactory
         out_view.add<Sprite>({{tx::view(), {16, 16, 32, 32}}});
     }
 
-    void _on_bake_(ecs::view& out_view) override {}
-
-    void _on_bake_with_args(ecs::view& out_view, int texture_id)
+    void _on_bake_(ecs::view& out_view, ArgsBase* args) override
     {
-        out_view.component<Sprite>().texture.set_id(texture_id);
+        if (args)
+        {
+            auto& [texture_id] = static_cast<ArgsPack<int>*>(args)->data;
+            out_view.component<Sprite>().texture.set_id(texture_id);
+        }
     }
 
     void _on_render_(ecs::view& out_view) override
@@ -30,4 +32,12 @@ struct DebugEntityFactory : public ecs::EntityViewFactory
             out_view.component<Pos>().y
         );
     }
+
+private:
+    template<typename... T>
+    struct ArgsPack : ArgsBase
+    {
+        std::tuple<T...> data;
+        ArgsPack(T&&... t) : data(std::forward<T>(t)...) {}
+    };
 };
