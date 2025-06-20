@@ -19,6 +19,9 @@ struct DebugEntityFactory : public ecs::EntityViewFactory
     {
         if (args)
         {
+            //example of several arguments use :
+            //auto& [texture_id, speed, name] = static_cast<ArgsPack<int, float, std::string>*>(args)->data;
+            
             auto& [texture_id] = static_cast<ArgsPack<int>*>(args)->data;
             out_view.component<Sprite>().texture.set_id(texture_id);
         }
