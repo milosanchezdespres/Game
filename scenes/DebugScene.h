@@ -28,7 +28,7 @@ struct DebugScene : public IScene
 
     void render() override
     {
-        for (auto v : ecs::make_query<Pos, Sprite>(VIEWTAG)) {
+        for (auto v : ecs::make_query<DebugFlag>(VIEWTAG)) {
             debug_entity_factory.render(v);
         }
     }

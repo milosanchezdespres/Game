@@ -62,7 +62,6 @@ namespace px
         template<typename T>
         struct ComponentPool : IPool
         {
-        private:
             T* _data = nullptr;
             size_t _capacity = 0;
             size_t _size = 0;
@@ -70,7 +69,6 @@ namespace px
             std::vector<size_t> sparse;
             std::vector<size_t> freeSlots;
 
-        public:
             ComponentPool()
             {
                 ecs::register_pool(this);
@@ -178,11 +176,9 @@ namespace px
 
         struct view
         {
-        private:
             EntityID id = { size_t(-1), size_t(-1) };
             ecs* owner = nullptr;
 
-        public:
             view() { if (!global_ecs_ptr) return; owner = global_ecs_ptr; id = owner->make(); }
 
             view(std::nullptr_t)
@@ -256,7 +252,6 @@ namespace px
             }
         };
 
-    private:
         EntityID make()
         {
             if (!_freeIndices.empty())
@@ -271,7 +266,6 @@ namespace px
             return {i, 0};
         }
 
-    public:
         static void destroy(EntityID e)
         {
             if (!global_ecs_ptr) return;
@@ -421,12 +415,6 @@ namespace px
 
         struct EntityViewFactory
         {
-        protected:
-            virtual void _on_base_bake_(ecs::view& out_view) {}
-            virtual void _on_bake_(ecs::view& out_view, ArgsBase* args) = 0;
-            virtual void _on_render_(ecs::view& out_view) {}
-
-        public:
             struct ArgsBase { virtual ~ArgsBase() {} };
 
             ecs::view bake()
@@ -459,6 +447,11 @@ namespace px
             }
 
             void render(ecs::view& out_view) { _on_render_(out_view); }
+
+        protected:
+            virtual void _on_base_bake_(ecs::view& out_view) {}
+            virtual void _on_bake_(ecs::view& out_view, ArgsBase* args) = 0;
+            virtual void _on_render_(ecs::view& out_view) {}
 
             template<typename... T>
             struct ArgsPack : ArgsBase
