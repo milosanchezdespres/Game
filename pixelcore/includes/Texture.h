@@ -274,6 +274,22 @@ namespace px
             }
 
             GLuint id() const { return _id; }
+
+            void set_id(GLuint new_id)
+            {
+                _id = new_id;
+                TextureData* data = TextureData::get(new_id);
+                if (data)
+                {
+                    width = data->width;
+                    height = data->height;
+                }
+                else
+                {
+                    width = 0.f;
+                    height = 0.f;
+                }
+            }
     };
 
     inline const std::unordered_map<GLuint, TextureData*>& Texture::textures() { return _loaded; }

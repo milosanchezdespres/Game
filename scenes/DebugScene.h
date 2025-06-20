@@ -2,6 +2,9 @@
 
 #include "../pixelcore/pixelcore.h"
 
+#include "entities/DebugEntity.h"
+//...
+
 struct DebugScene : public IScene
 {
     struct Pos { float x, y; };
@@ -23,7 +26,12 @@ struct DebugScene : public IScene
     {
         default_texture = tx::load("default");
 
-        removal_test = {};
+        removal_test =
+        {
+            Pos{150, 150},
+            Velocity{300, 300},
+            Sprite{{default_texture, {16, 16, 32, 32}}}
+        };
 
         entity =
         {
@@ -32,7 +40,8 @@ struct DebugScene : public IScene
             Sprite{{default_texture, {16, 16, 32, 32}}}
         };
 
-        ecs::destroy(removal_test);
+        print(entity.id.version);
+        print(removal_test.id.version);
     }
 
     void update() override
@@ -70,6 +79,7 @@ struct DebugScene : public IScene
     void render() override
     {
         entity.component<Sprite>().texture.blit(entity.component<Pos>().x, entity.component<Pos>().y);
+        removal_test.component<Sprite>().texture.blit(removal_test.component<Pos>().x, removal_test.component<Pos>().y);
     }
 
     void stop() override

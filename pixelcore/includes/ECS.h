@@ -91,8 +91,7 @@ namespace px
                 {
                     if (has(entity)) return (int)sparse[entity];
 
-                    if (!sparse.size()) sparse.resize(entity + 1, size_t(-1));
-                    else if (entity >= sparse.size()) sparse.resize(entity + 1, size_t(-1));
+                    if (entity >= sparse.size()) sparse.resize(entity + 1, size_t(-1));
 
                     if (freeSlots.size() > 0)
                     {
@@ -101,6 +100,7 @@ namespace px
 
                         new(_data + slot) T(std::move(component));
 
+                        if (slot >= dense.size()) dense.resize(slot + 1);
                         dense[slot] = entity;
                         sparse[entity] = slot;
 
@@ -110,8 +110,10 @@ namespace px
                     if (_size >= _capacity) grow();
 
                     new(_data + _size) T(std::move(component));
+                    if (_size >= dense.size()) dense.resize(_size + 1);
+                    dense[_size] = entity;
+
                     sparse[entity] = _size;
-                    dense.push_back(entity);
 
                     return (int)(_size++);
                 }
@@ -152,8 +154,39 @@ namespace px
                 view() : owner(global_ecs_ptr), id(global_ecs_ptr ? global_ecs_ptr->make() : EntityID{0, 0}) {}
 
                 template<typename... Components>
-                view(Components&&... components) : owner(global_ecs_ptr), id(global_ecs_ptr ? global_ecs_ptr->make() : EntityID{0, 0})
-                { (add(std::forward<Components>(components)), ...); }
+                view(Components&&... components)
+                    : owner(global_ecs_ptr), id(global_ecs_ptr ? global_ecs_ptr->make() : EntityID{0, 0})
+                {
+                    (add(std::forward<Components>(components)), ...);
+                }
+
+                view(const view& other) : owner(other.owner), id(owner ? owner->make() : EntityID{size_t(-1), size_t(-1)}) {}
+
+                view& operator=(const view& other)
+                {
+                    if (this == &other) return *this;
+                    id = owner && valid() ? owner->make() : EntityID{size_t(-1), size_t(-1)};
+                    owner = other.owner;
+                    return *this;
+                }
+
+                view(view&& other) noexcept : id(other.id), owner(other.owner)
+                {
+                    other.id = { size_t(-1), size_t(-1) };
+                    other.owner = nullptr;
+                }
+
+                view& operator=(view&& other) noexcept
+                {
+                    if (this != &other)
+                    {
+                        id = other.id;
+                        owner = other.owner;
+                        other.id = { size_t(-1), size_t(-1) };
+                        other.owner = nullptr;
+                    }
+                    return *this;
+                }
 
                 template<typename T>
                 T& component() { return owner->component<T>(id); }
@@ -212,5 +245,11 @@ namespace px
             static void remove(EntityID e) { get_pool<T>().remove(e.index); }
 
             static void clear() { for (auto* pool : _pools) pool->clear(); }
+
+            struct EntityViewFactory
+            {
+                virtual void _on_bake_(ecs::view& out_view) = 0;
+                void bake(view& out_view) { _on_bake_(out_view); }
+            };
     };
 }
