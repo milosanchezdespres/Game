@@ -20,6 +20,8 @@ struct DebugScene : public IScene
 
         debug_entity_factory.bake(default_texture.id(), 50.0f, 50.0f);
         debug_entity_factory.bake(default_texture.id(), 150.0f, 50.0f);
+        debug_entity_factory.bake(default_texture.id(), 150.0f, 150.0f);
+        debug_entity_factory.bake(default_texture.id(), 50.0f, 150.0f);
         
         ecs::attach<DebugSystem>();
     }
@@ -28,7 +30,7 @@ struct DebugScene : public IScene
 
     void render() override
     {
-        for (auto v : ecs::make_query<DebugFlag>(VIEWTAG)) {
+        for (auto v : ecs::make_query<DebugFlag>(VIEWTAG)){
             debug_entity_factory.render(v);
         }
     }
