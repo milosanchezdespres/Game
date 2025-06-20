@@ -26,7 +26,12 @@ struct DebugScene : public IScene
         ecs::attach<DebugSystem>();
     }
 
-    void update() override {}
+    void update() override
+    {
+        if(CLICK(RIGHT)) board::start("title");
+
+        //...
+    }
 
     void render() override
     {

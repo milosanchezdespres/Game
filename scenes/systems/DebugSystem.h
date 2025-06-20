@@ -4,9 +4,9 @@
 
 #include "../entities/DebugEntity.h"
 
-struct DebugSystem : px::ecs::System<DebugFlag, Pos, Velocity>
+struct DebugSystem : px::ecs::System<DebugFlag, DebugPos, DebugVelocity>
 {
-    void run(std::tuple<DebugFlag&, Pos&, Velocity&> components) override
+    void run(std::tuple<DebugFlag&, DebugPos&, DebugVelocity&> components) override
     {
         auto& [flag, pos, vel] = components;
 

@@ -3,18 +3,18 @@
 #include "../../pixelcore/pixelcore.h"
 
 struct DebugFlag {};
-struct Pos { float x, y; bool dragging; };
-struct Velocity { float x, y; };
-struct Sprite { tx::view texture; };
+struct DebugPos { float x, y; bool dragging; };
+struct DebugVelocity { float x, y; };
+struct DebugSprite { tx::view texture; };
 
 struct DebugEntityFactory : public ecs::EntityViewFactory
 {
     void _on_base_bake_(ecs::view& out_view) override
     {
         out_view.add<DebugFlag>({});
-        out_view.add<Pos>({0, 0, false});
-        out_view.add<Velocity>({300, 300});
-        out_view.add<Sprite>({{tx::view(), {16, 16, 32, 32}}});
+        out_view.add<DebugPos>({0, 0, false});
+        out_view.add<DebugVelocity>({300, 300});
+        out_view.add<DebugSprite>({{tx::view(), {16, 16, 32, 32}}});
     }
 
     void _on_bake_(ecs::view& out_view, ArgsBase* args) override
@@ -26,19 +26,19 @@ struct DebugEntityFactory : public ecs::EntityViewFactory
             
             auto& [texture_id, x, y] = static_cast<ArgsPack<int, float, float>*>(args)->data;
 
-            out_view.component<Sprite>().texture.set_id(texture_id);
+            out_view.component<DebugSprite>().texture.set_id(texture_id);
 
-            out_view.component<Pos>().x = x;
-            out_view.component<Pos>().y = y;
+            out_view.component<DebugPos>().x = x;
+            out_view.component<DebugPos>().y = y;
         }
     }
 
     void _on_render_(ecs::view& out_view) override
     {
-        out_view.component<Sprite>().texture.blit
+        out_view.component<DebugSprite>().texture.blit
         (
-            out_view.component<Pos>().x, 
-            out_view.component<Pos>().y
+            out_view.component<DebugPos>().x, 
+            out_view.component<DebugPos>().y
         );
     }
 };
