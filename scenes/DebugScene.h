@@ -5,6 +5,9 @@
 #include "entities/DebugEntity.h"
 //...
 
+#include "systems/DebugSystem.h"
+//...
+
 struct DebugScene : public IScene
 {
     tx::view default_texture;
@@ -29,6 +32,8 @@ struct DebugScene : public IScene
 
         entity2.component<Pos>().x = 150;
         entity2.component<Pos>().y = 150;
+        
+        ecs::attach<DebugSystem>();
     }
 
     void update() override

@@ -49,7 +49,11 @@ namespace px
 
                 screen::mouse(cursor.x, cursor.y);
 
-                if(scene) scene->update();
+                if(scene)
+                {
+                    scene->update();
+                    ecs::update();
+                }
 
                 screen::begin_render(GLFW_COLOR("091c36"));
 
