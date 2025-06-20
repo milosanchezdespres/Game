@@ -418,6 +418,13 @@ namespace px
             virtual void _on_base_bake_(ecs::view& out_view) {}
             virtual void _on_bake_(ecs::view& out_view, ArgsBase* args) = 0;
             virtual void _on_render_(ecs::view& out_view) {}
+
+            template<typename... T>
+            struct ArgsPack : ArgsBase
+            {
+                std::tuple<T...> data;
+                ArgsPack(T&&... t) : data(std::forward<T>(t)...) {}
+            };
         };
     };
 

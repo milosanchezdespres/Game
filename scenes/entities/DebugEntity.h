@@ -2,7 +2,7 @@
 
 #include "../../pixelcore/pixelcore.h"
 
-struct Pos { float x, y; };
+struct Pos { float x, y; bool dragging; };
 struct Velocity { float x, y; };
 struct Sprite { tx::view texture; };
 
@@ -10,7 +10,7 @@ struct DebugEntityFactory : public ecs::EntityViewFactory
 {
     void _on_base_bake_(ecs::view& out_view) override
     {
-        out_view.add<Pos>({50, 50});
+        out_view.add<Pos>({50, 50, false});
         out_view.add<Velocity>({300, 300});
         out_view.add<Sprite>({{tx::view(), {16, 16, 32, 32}}});
     }
@@ -35,12 +35,4 @@ struct DebugEntityFactory : public ecs::EntityViewFactory
             out_view.component<Pos>().y
         );
     }
-
-private:
-    template<typename... T>
-    struct ArgsPack : ArgsBase
-    {
-        std::tuple<T...> data;
-        ArgsPack(T&&... t) : data(std::forward<T>(t)...) {}
-    };
 };

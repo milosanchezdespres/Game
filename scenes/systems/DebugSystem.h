@@ -10,6 +10,29 @@ struct DebugSystem : px::ecs::System<Pos, Velocity>
     {
         auto& [pos, vel] = components;
 
-        print(screen::fps);
+        if(pos.dragging)
+        {
+            pos.x = board::cursor.x;
+            pos.y = board::cursor.y;
+        }
+        else
+        {
+            if(HOLD(Z) || HOLD(W)) pos.y -= vel.x * screen::delta;
+            if(HOLD(S)) pos.y += vel.x * screen::delta;
+            if(HOLD(A) || HOLD(Q)) pos.x -= vel.x * screen::delta;
+            if(HOLD(D)) pos.x += vel.x * screen::delta;
+        }
+
+        bool is_mouse_hover = board::hover(pos.x, pos.y, 32, 32);
+
+        if(!pos.dragging && is_mouse_hover && CLICK(LEFT))
+        {
+            pos.dragging = true;
+        }
+
+        if(pos.dragging && !HCLICK(LEFT))
+        {
+            pos.dragging = false;
+        }
     }
 };
