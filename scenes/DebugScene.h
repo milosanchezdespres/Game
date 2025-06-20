@@ -9,6 +9,8 @@ struct DebugScene : public IScene
     struct Sprite { tx::view texture; };
 
     tx::view default_texture;
+
+    ecs::view removal_test;
     ecs::view entity;
 
     bool dragging = false;
@@ -21,12 +23,16 @@ struct DebugScene : public IScene
     {
         default_texture = tx::load("default");
 
+        removal_test = {};
+
         entity =
         {
             Pos{50, 50},
             Velocity{300, 300},
             Sprite{{default_texture, {16, 16, 32, 32}}}
         };
+
+        ecs::destroy(removal_test);
     }
 
     void update() override
