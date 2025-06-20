@@ -7,10 +7,6 @@
 
 struct DebugScene : public IScene
 {
-    struct Pos { float x, y; };
-    struct Velocity { float x, y; };
-    struct Sprite { tx::view texture; };
-
     tx::view default_texture;
 
     ecs::view removal_test;
@@ -20,28 +16,22 @@ struct DebugScene : public IScene
     float drag_offset_x = 0.f;
     float drag_offset_y = 0.f;
 
+    DebugEntityFactory debug_entity_factory;
+
     DebugScene() : IScene() {}
 
     void start() override
     {
         default_texture = tx::load("default");
 
-        removal_test =
-        {
-            Pos{150, 150},
-            Velocity{300, 300},
-            Sprite{{default_texture, {16, 16, 32, 32}}}
-        };
+        debug_entity_factory.bake(removal_test);
+        debug_entity_factory.bake(entity);
 
-        entity =
-        {
-            Pos{50, 50},
-            Velocity{300, 300},
-            Sprite{{default_texture, {16, 16, 32, 32}}}
-        };
+        removal_test.component<Sprite>().texture.set_id(default_texture.id());
+        entity.component<Sprite>().texture.set_id(default_texture.id());
 
-        print(entity.id.version);
-        print(removal_test.id.version);
+        removal_test.component<Pos>().x = 150;
+        removal_test.component<Pos>().y = 150;
     }
 
     void update() override
