@@ -426,6 +426,37 @@ namespace px
                 ArgsPack(T&&... t) : data(std::forward<T>(t)...) {}
             };
         };
+
+        struct ViewTag {};
+
+        template<typename... Components>
+        struct query_with_view : query<Components...>
+        {
+            using Base = query<Components...>;
+
+            struct iterator_with_view : Base::iterator
+            {
+                using Base::iterator::iterator;
+
+                ecs::view operator*()
+                {
+                    size_t entityIndex = std::get<0>(this->parent->pools)->dense[this->pos];
+                    ecs::view entityView;
+                    entityView.owner = global_ecs_ptr;
+                    entityView.id = { entityIndex, global_ecs_ptr->_versions[entityIndex] };
+                    return entityView;
+                }
+            };
+
+            iterator_with_view begin() { return iterator_with_view(static_cast<Base*>(this), 0); }
+            iterator_with_view end() { return iterator_with_view(static_cast<Base*>(this), std::get<0>(this->pools)->_size); }
+        };
+
+        template<typename... Components>
+        query_with_view<Components...> make_query(ecs::ViewTag)
+        {
+            return query_with_view<Components...>();
+        }
     };
 
     inline ecs global_ecs_instance;

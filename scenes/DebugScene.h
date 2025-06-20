@@ -10,24 +10,16 @@
 
 struct DebugScene : public IScene
 {
-    tx::view default_texture;
-
-    ecs::view entity2 = nullptr;
-    ecs::view entity = nullptr;
-
     DebugEntityFactory debug_entity_factory;
 
     DebugScene() : IScene() {}
 
     void start() override
     {
-        default_texture = tx::load("default");
+        tx::view default_texture = tx::load("default");
 
-        entity2 = debug_entity_factory.bake(default_texture.id());
-        entity = debug_entity_factory.bake(default_texture.id());
-
-        entity2.component<Pos>().x = 150;
-        entity2.component<Pos>().y = 150;
+        debug_entity_factory.bake(default_texture.id(), 50.0f, 50.0f);
+        debug_entity_factory.bake(default_texture.id(), 150.0f, 50.0f);
         
         ecs::attach<DebugSystem>();
     }
@@ -36,8 +28,9 @@ struct DebugScene : public IScene
 
     void render() override
     {
-        debug_entity_factory.render(entity);
-        debug_entity_factory.render(entity2);
+        for (auto v : px::global_ecs_instance.make_query<Pos, Sprite>(px::ecs::ViewTag{})) {
+            debug_entity_factory.render(v);
+        }
     }
 
     void stop() override

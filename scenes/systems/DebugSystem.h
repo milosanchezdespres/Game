@@ -25,14 +25,7 @@ struct DebugSystem : px::ecs::System<Pos, Velocity>
 
         bool is_mouse_hover = board::hover(pos.x, pos.y, 32, 32);
 
-        if(!pos.dragging && is_mouse_hover && CLICK(LEFT))
-        {
-            pos.dragging = true;
-        }
-
-        if(pos.dragging && !HCLICK(LEFT))
-        {
-            pos.dragging = false;
-        }
+        if(!pos.dragging && is_mouse_hover && CLICK(LEFT)) pos.dragging = true;
+        if(pos.dragging && !HCLICK(LEFT)) pos.dragging = false;
     }
 };
