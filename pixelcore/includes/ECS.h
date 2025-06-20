@@ -331,22 +331,32 @@ namespace px
                 iterator end() { return iterator(this, std::get<0>(pools)->_size); }
             };
 
-            template<typename... Components>
-            query<Components...> make_query()
-            {
-                return query<Components...>();
-            }
+            template<typename... Components> query<Components...> make_query() { return query<Components...>(); }
 
             struct EntityViewFactory
             {
-                virtual void _on_bake_(ecs::view& out_view) = 0;
-
-                void bake(view& out_view)
-                { 
-                    out_view = {};
+                void bake(ecs::view& out_view)
+                {
+                    out_view = ecs::view();
+                    _on_base_bake_(out_view);
                     _on_bake_(out_view);
                 }
+
+                void bake(ecs::view& out_view, int texture_id)
+                {
+                    out_view = ecs::view();
+                    _on_base_bake_(out_view);
+                    _on_bake_with_args(out_view, texture_id);
+                }
+
+            protected:
+                virtual void _on_base_bake_(ecs::view& out_view) {}
+                virtual void _on_bake_(ecs::view& out_view) = 0;
+                virtual void _on_bake_with_args(ecs::view& out_view, int texture_id)
+                    { _on_bake_(out_view); }
             };
+
+
     };
 
     inline ecs global_ecs_instance;

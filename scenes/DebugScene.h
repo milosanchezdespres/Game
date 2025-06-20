@@ -24,11 +24,8 @@ struct DebugScene : public IScene
     {
         default_texture = tx::load("default");
 
-        debug_entity_factory.bake(removal_test);
-        debug_entity_factory.bake(entity);
-
-        removal_test.component<Sprite>().texture.set_id(default_texture.id());
-        entity.component<Sprite>().texture.set_id(default_texture.id());
+        debug_entity_factory.bake(removal_test, default_texture.id());
+        debug_entity_factory.bake(entity, default_texture.id());
 
         removal_test.component<Pos>().x = 150;
         removal_test.component<Pos>().y = 150;
