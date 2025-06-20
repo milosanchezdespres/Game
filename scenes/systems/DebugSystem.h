@@ -4,11 +4,11 @@
 
 #include "../entities/DebugEntity.h"
 
-struct DebugSystem : px::ecs::System<Pos, Velocity>
+struct DebugSystem : px::ecs::System<DebugFlag, Pos, Velocity>
 {
-    void run(std::tuple<Pos&, Velocity&> components) override
+    void run(std::tuple<DebugFlag&, Pos&, Velocity&> components) override
     {
-        auto& [pos, vel] = components;
+        auto& [flag, pos, vel] = components;
 
         if(pos.dragging)
         {
