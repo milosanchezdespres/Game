@@ -28,7 +28,7 @@ struct DebugScene : public IScene
 
     void render() override
     {
-        for (auto v : px::global_ecs_instance.make_query<Pos, Sprite>(px::ecs::ViewTag{})) {
+        for (auto v : ecs::make_query<Pos, Sprite>(VIEWTAG)) {
             debug_entity_factory.render(v);
         }
     }
