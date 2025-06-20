@@ -33,7 +33,11 @@ namespace px
             ecs() { global_ecs_ptr = this; }
 
             static void register_pool(IPool* pool) { _pools.push_back(pool); }
-            static void unregister_pool(IPool* pool) { auto it = std::remove(_pools.begin(), _pools.end(), pool); if (it != _pools.end()) _pools.erase(it, _pools.end()); }
+            static void unregister_pool(IPool* pool)
+            {
+                auto it = std::remove(_pools.begin(), _pools.end(), pool);
+                if (it != _pools.end()) _pools.erase(it, _pools.end());
+            }
 
             template<typename T>
             struct ComponentPool : IPool
@@ -93,7 +97,7 @@ namespace px
 
                     if (entity >= sparse.size()) sparse.resize(entity + 1, size_t(-1));
 
-                    if (freeSlots.size() > 0)
+                    if (!freeSlots.empty())
                     {
                         size_t slot = freeSlots.back();
                         freeSlots.pop_back();
@@ -148,29 +152,38 @@ namespace px
 
             struct view
             {
-                EntityID id;
-                ecs* owner;
+                EntityID id = { size_t(-1), size_t(-1) };
+                ecs* owner = nullptr;
 
-                view() : owner(global_ecs_ptr), id(global_ecs_ptr ? global_ecs_ptr->make() : EntityID{0, 0}) {}
+                view() { if (!global_ecs_ptr) return; owner = global_ecs_ptr; id = owner->make(); }
+
+                view(std::nullptr_t)
+                    : id{size_t(-1), size_t(-1)}, owner(nullptr)
+                {}
 
                 template<typename... Components>
                 view(Components&&... components)
-                    : owner(global_ecs_ptr), id(global_ecs_ptr ? global_ecs_ptr->make() : EntityID{0, 0})
                 {
-                    (add(std::forward<Components>(components)), ...);
+                    if (!global_ecs_ptr) return;
+                    owner = global_ecs_ptr;
+                    id = owner->make();
+                    if (valid()) (add(std::forward<Components>(components)), ...);
                 }
 
-                view(const view& other) : owner(other.owner), id(owner ? owner->make() : EntityID{size_t(-1), size_t(-1)}) {}
+                view(const view& other)
+                    : id(other.id), owner(other.owner)
+                {}
 
                 view& operator=(const view& other)
                 {
                     if (this == &other) return *this;
-                    id = owner && valid() ? owner->make() : EntityID{size_t(-1), size_t(-1)};
+                    id = other.id;
                     owner = other.owner;
                     return *this;
                 }
 
-                view(view&& other) noexcept : id(other.id), owner(other.owner)
+                view(view&& other) noexcept
+                    : id(other.id), owner(other.owner)
                 {
                     other.id = { size_t(-1), size_t(-1) };
                     other.owner = nullptr;
@@ -189,15 +202,30 @@ namespace px
                 }
 
                 template<typename T>
-                T& component() { return owner->component<T>(id); }
+                T& component()
+                {
+                    if (!valid()) throw std::runtime_error("invalid view component access");
+                    return owner->component<T>(id);
+                }
 
                 template<typename T>
-                int add(T&& component) { return owner->add<T>(id, component); }
+                int add(T&& component)
+                {
+                    if (!valid()) throw std::runtime_error("invalid view add");
+                    return owner->add<T>(id, component);
+                }
 
                 template<typename T>
-                void remove() { return owner->remove<T>(id); }
+                void remove()
+                {
+                    if (!valid()) return;
+                    owner->remove<T>(id);
+                }
 
-                bool valid() const { return owner && owner->valid(id); }
+                bool valid() const
+                {
+                    return owner && owner->valid(id);
+                }
             };
 
             EntityID make()
@@ -246,10 +274,83 @@ namespace px
 
             static void clear() { for (auto* pool : _pools) pool->clear(); }
 
+            template<typename... Components>
+            struct query
+            {
+                using Pools = std::tuple<ComponentPool<Components>*...>;
+                Pools pools;
+
+                query()
+                    : pools(&get_pool<Components>()...)
+                {}
+
+                struct iterator
+                {
+                    query* parent;
+                    size_t pos = 0;
+                    size_t end = 0;
+
+                    iterator(query* q, size_t start)
+                        : parent(q), pos(start)
+                    {
+                        end = std::get<0>(parent->pools)->_size;
+                        for (auto pool_ptr : { std::get<ComponentPool<Components>*>(parent->pools)... })
+                            if (pool_ptr->_size < end)
+                                end = pool_ptr->_size;
+                        advance_to_valid();
+                    }
+
+                    void advance_to_valid()
+                    {
+                        while (pos < end)
+                        {
+                            size_t entity = std::get<0>(parent->pools)->dense[pos];
+                            bool all_have = true;
+                            ((all_have = all_have && std::get<ComponentPool<Components>*>(parent->pools)->has(entity)), ...);
+                            if (all_have) break;
+                            ++pos;
+                        }
+                    }
+
+                    bool operator!=(const iterator& other) const { return pos != other.pos; }
+
+                    void operator++()
+                    {
+                        ++pos;
+                        advance_to_valid();
+                    }
+
+                    auto operator*()
+                    {
+                        size_t entity = std::get<0>(parent->pools)->dense[pos];
+                        return std::forward_as_tuple(std::get<ComponentPool<Components>*>(parent->pools)->_data[std::get<ComponentPool<Components>*>(parent->pools)->sparse[entity]]...);
+                    }
+                };
+
+                iterator begin() { return iterator(this, 0); }
+                iterator end() { return iterator(this, std::get<0>(pools)->_size); }
+            };
+
+            template<typename... Components>
+            query<Components...> make_query()
+            {
+                return query<Components...>();
+            }
+
             struct EntityViewFactory
             {
                 virtual void _on_bake_(ecs::view& out_view) = 0;
                 void bake(view& out_view) { _on_bake_(out_view); }
             };
     };
+
+    inline ecs global_ecs_instance;
 }
+
+/* example of iteration usages :
+auto q = ecs::make_query<Component1, Component2>();
+
+for (auto [comp1, comp2] : q)
+{
+    // Access the components directly
+} */

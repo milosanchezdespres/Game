@@ -9,8 +9,8 @@ struct DebugScene : public IScene
 {
     tx::view default_texture;
 
-    ecs::view removal_test;
-    ecs::view entity;
+    ecs::view removal_test = nullptr;
+    ecs::view entity = nullptr;
 
     bool dragging = false;
     float drag_offset_x = 0.f;
