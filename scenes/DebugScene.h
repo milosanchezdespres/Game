@@ -65,8 +65,8 @@ struct DebugScene : public IScene
 
     void render() override
     {
-        entity.component<Sprite>().texture.blit(entity.component<Pos>().x, entity.component<Pos>().y);
-        entity2.component<Sprite>().texture.blit(entity2.component<Pos>().x, entity2.component<Pos>().y);
+        debug_entity_factory.render(entity);
+        debug_entity_factory.render(entity2);
     }
 
     void stop() override

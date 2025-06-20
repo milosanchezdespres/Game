@@ -349,11 +349,15 @@ namespace px
                     _on_bake_with_args(out_view, texture_id);
                 }
 
+                void render(ecs::view& out_view) { _on_render_(out_view); }
+
                 protected:
                     virtual void _on_base_bake_(ecs::view& out_view) {}
                     virtual void _on_bake_(ecs::view& out_view) = 0;
                     virtual void _on_bake_with_args(ecs::view& out_view, int texture_id)
                         { _on_bake_(out_view); }
+                        
+                    virtual void _on_render_(ecs::view& out_view) {}
             };
 
 

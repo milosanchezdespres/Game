@@ -21,4 +21,13 @@ struct DebugEntityFactory : public ecs::EntityViewFactory
     {
         out_view.component<Sprite>().texture.set_id(texture_id);
     }
+
+    void _on_render_(ecs::view& out_view) override
+    {
+        out_view.component<Sprite>().texture.blit
+        (
+            out_view.component<Pos>().x, 
+            out_view.component<Pos>().y
+        );
+    }
 };
