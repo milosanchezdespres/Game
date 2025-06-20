@@ -9,7 +9,7 @@ struct DebugScene : public IScene
 {
     tx::view default_texture;
 
-    ecs::view removal_test = nullptr;
+    ecs::view entity2 = nullptr;
     ecs::view entity = nullptr;
 
     bool dragging = false;
@@ -24,11 +24,11 @@ struct DebugScene : public IScene
     {
         default_texture = tx::load("default");
 
-        debug_entity_factory.bake(removal_test, default_texture.id());
+        debug_entity_factory.bake(entity2, default_texture.id());
         debug_entity_factory.bake(entity, default_texture.id());
 
-        removal_test.component<Pos>().x = 150;
-        removal_test.component<Pos>().y = 150;
+        entity2.component<Pos>().x = 150;
+        entity2.component<Pos>().y = 150;
     }
 
     void update() override
@@ -66,7 +66,7 @@ struct DebugScene : public IScene
     void render() override
     {
         entity.component<Sprite>().texture.blit(entity.component<Pos>().x, entity.component<Pos>().y);
-        removal_test.component<Sprite>().texture.blit(removal_test.component<Pos>().x, removal_test.component<Pos>().y);
+        entity2.component<Sprite>().texture.blit(entity2.component<Pos>().x, entity2.component<Pos>().y);
     }
 
     void stop() override
